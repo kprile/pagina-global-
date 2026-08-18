@@ -1,0 +1,6 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 200" role="img" aria-label="Neumatico">
+  <rect width="200" height="200" fill="#f7f5f1"/>
+  <circle cx="100" cy="100" r="68" fill="none" stroke="#c4c0b8" stroke-width="22"/>
+  <circle cx="100" cy="100" r="34" fill="none" stroke="#d8d5cf" stroke-width="10"/>
+  <circle cx="100" cy="100" r="12" fill="#c4c0b8"/>
+</svg>
