@@ -131,6 +131,11 @@ window.__resources = Object.assign(window.__resources || {}, {
   .gt-card:nth-child(9){animation-delay:360ms}  .gt-card:nth-child(10){animation-delay:405ms}
   .gt-card:nth-child(11){animation-delay:450ms} .gt-card:nth-child(12){animation-delay:495ms}
 
+  /* Transicion al cambiar de filtro. Las tarjetas ya animan una por una; esto
+     mueve la grilla completa para que el cambio se lea como tal. */
+  @keyframes gtGridSwap{from{opacity:0; transform:translateY(12px);} to{opacity:1; transform:none;}}
+  .gt-swap-a, .gt-swap-b{animation:gtGridSwap 0.40s cubic-bezier(.2,.7,.2,1) both;}
+
   html{scroll-behavior:smooth;}
 
   /* Accesibilidad: quien configura su sistema para reducir movimiento no deberia
@@ -166,11 +171,13 @@ window.__resources = Object.assign(window.__resources || {}, {
   <!-- ============ HERO ============ -->
   <div style="position:relative; overflow:hidden;">
     <div style="position:absolute; inset:0; pointer-events:none;">
-      <img id="gtHeroImg" src="assets/hero-tire.webp" alt="" style="position:absolute; inset:0; width:100%; height:100%; object-fit:cover; object-position:center right; animation:gtHeroImgIn 1.1s cubic-bezier(.2,.7,.2,1) both;" />
+      <div id="gtHeroPar" style="position:absolute; left:0; right:0; top:-12%; bottom:-12%; will-change:transform;">
+        <img id="gtHeroImg" src="assets/hero-tire.webp" alt="" style="position:absolute; inset:0; width:100%; height:100%; object-fit:cover; object-position:center right; animation:gtHeroImgIn 1.1s cubic-bezier(.2,.7,.2,1) both;" />
+      </div>
       <div style="position:absolute; inset:0; background:linear-gradient(90deg, rgba(10,12,11,0.88) 0%, rgba(10,12,11,0.7) 45%, rgba(10,12,11,0.15) 100%);"></div>
-      <div style="position:absolute; inset:0; background:radial-gradient(ellipse 60% 80% at 15% 30%, rgba(245,179,1,0.10), transparent 70%);"></div>
+      <div id="gtHeroGlow" style="position:absolute; inset:0; background:radial-gradient(ellipse 60% 80% at 15% 30%, rgba(245,179,1,0.10), transparent 70%); will-change:transform;"></div>
     </div>
-  <section data-screen-label="Hero" style="position:relative; z-index:1; display:flex; flex-wrap:wrap; align-items:center; gap:clamp(28px,4vw,56px); padding:clamp(48px,8vw,96px) clamp(20px,5vw,56px) clamp(44px,7vw,90px); max-width:1100px; margin:0 auto;">
+  <section id="gtHeroCopy" data-screen-label="Hero" style="position:relative; z-index:1; will-change:transform, opacity; display:flex; flex-wrap:wrap; align-items:center; gap:clamp(28px,4vw,56px); padding:clamp(48px,8vw,96px) clamp(20px,5vw,56px) clamp(44px,7vw,90px); max-width:1100px; margin:0 auto;">
     <div style="flex:1; min-width:min(100%,340px);">
     <div style="font-family:'Barlow Condensed',sans-serif; font-weight:600; font-size:16px; letter-spacing:0.18em; text-transform:uppercase; color:#f5b301; margin-bottom:18px; animation:gtHeroIn 0.7s cubic-bezier(.2,.7,.2,1) both;">Importadora directa · Chile</div>
     <h1 style="margin:0 0 20px; font-family:'Barlow Condensed',sans-serif; font-weight:800; font-size:clamp(42px,7vw,84px); line-height:0.98; text-transform:uppercase; letter-spacing:0.01em; text-wrap:balance; animation:gtHeroIn 0.7s 0.08s cubic-bezier(.2,.7,.2,1) both;">Neumáticos para auto, camioneta y carga</h1>
@@ -267,7 +274,7 @@ window.__resources = Object.assign(window.__resources || {}, {
       <div style="font-size:14px; color:#5a5d63; margin-bottom:14px;">{{ resultText }}</div>
 
       <!-- Results -->
-      <div style="display:grid; grid-template-columns:repeat(auto-fill, minmax(290px, 1fr)); gap:14px;">
+      <div class="{{ gridAnim }}" style="display:grid; grid-template-columns:repeat(auto-fill, minmax(290px, 1fr)); gap:14px;">
         <sc-for list="{{ results }}" as="p" hint-placeholder-count="6">
           <div class="gt-card" style="display:flex; flex-direction:column; gap:10px; background:#ffffff; border:1px solid #d8d5cf; border-radius:8px; padding:14px 14px 14px; cursor:pointer; overflow:hidden;" onClick="{{ p.open }}">
             <div class="gt-card-img" role="img" aria-label="{{ p.modelo }}" style="width:100%; height:140px; border-radius:6px; background-color:#f7f5f1; background-position:center; background-size:contain; background-repeat:no-repeat; background-image:url('{{ p.img }}');"></div>
@@ -351,7 +358,7 @@ window.__resources = Object.assign(window.__resources || {}, {
 </x-dc>
 <script type="text/x-dc" data-dc-script data-props="{&quot;whatsappNumber&quot;:{&quot;editor&quot;:&quot;text&quot;,&quot;default&quot;:&quot;+56981277848&quot;,&quot;tsType&quot;:&quot;string&quot;,&quot;section&quot;:&quot;Contacto&quot;}}">
 class Component extends DCLogic {
-  state = { query: '', marca: 'todas', uso: 'todos', products: [], selected: null, galleryIndex: 0, lightbox: false, scrollY: 0, animatedCount: 0 };
+  state = { query: '', marca: 'todas', uso: 'todos', products: [], selected: null, galleryIndex: 0, lightbox: false, scrollY: 0, animatedCount: 0, swap: 0 };
 
   componentDidMount() {
     this._loadProducts();
@@ -366,8 +373,24 @@ class Component extends DCLogic {
         const y = window.scrollY;
         const header = document.querySelector('.gt-header');
         if (header) header.style.boxShadow = y > 8 ? '0 4px 14px rgba(20,21,23,0.12)' : 'none';
-        const heroImg = document.getElementById('gtHeroImg');
-        if (heroImg) heroImg.style.transform = 'translateY(' + Math.min(40, y * 0.12) + 'px)';
+        /* Parallax de verdad: tres capas a distinta velocidad. Antes se movia el
+           <img>, pero su animacion de entrada usa fill-mode:both y las animaciones
+           CSS pisan al estilo inline, asi que el transform no tenia ningun efecto
+           (el computado se quedaba en la identidad). Ahora se mueve un wrapper
+           sin animacion propia. */
+        if (!this._noMotion) {
+          const vh = window.innerHeight || 800;
+          const prog = Math.min(1, y / vh);
+          const par = document.getElementById('gtHeroPar');
+          if (par) par.style.transform = 'translate3d(0,' + (y * 0.30).toFixed(1) + 'px,0) scale(' + (1 + prog * 0.07).toFixed(4) + ')';
+          const glow = document.getElementById('gtHeroGlow');
+          if (glow) glow.style.transform = 'translate3d(0,' + (y * 0.15).toFixed(1) + 'px,0)';
+          const copy = document.getElementById('gtHeroCopy');
+          if (copy) {
+            copy.style.transform = 'translate3d(0,' + (y * -0.05).toFixed(1) + 'px,0)';
+            copy.style.opacity = String(Math.max(0, 1 - prog * 1.15));
+          }
+        }
         if (this._reveal) this._reveal();
       });
     };
@@ -379,6 +402,8 @@ class Component extends DCLogic {
        Este barrido vuelve a consultar el DOM en cada pasada, asi que sobrevive a los
        re-render, y se detiene solo cuando ya no queda nada por revelar. */
     document.documentElement.classList.add('gt-js');
+    /* Quien pidio reducir movimiento no recibe parallax. */
+    this._noMotion = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
     this._reveal = () => {
       const vh = window.innerHeight || 0;
       document.querySelectorAll('.gt-reveal:not(.gt-in)').forEach(el => {
@@ -398,6 +423,7 @@ class Component extends DCLogic {
     window.removeEventListener('scroll', this._onScroll);
     if (this._countRaf) cancelAnimationFrame(this._countRaf);
     if (this._revealTimer) clearInterval(this._revealTimer);
+    if (this._qTimer) clearTimeout(this._qTimer);
   }
 
   ripple = (e) => {
@@ -547,7 +573,7 @@ class Component extends DCLogic {
       const active = it.value === activeKey;
       return {
         label: it.label,
-        onClick: () => this.setState({ [stateKey]: it.value }),
+        onClick: () => this.setState(s => ({ [stateKey]: it.value, swap: (s.swap || 0) + 1 })),
         bg: active ? '#1a1b1e' : '#ffffff',
         color: active ? '#f5b301' : '#1a1b1e',
         border: active ? '#1a1b1e' : '#c4c0b8'
@@ -621,9 +647,18 @@ class Component extends DCLogic {
       marcaChips,
       usoChips,
       noResults: results.length === 0 && products.length > 0,
+      /* Dos clases identicas que se alternan: cambiar el nombre reinicia la
+         animacion, que es lo que hace visible el cambio de filtro. */
+      gridAnim: (this.state.swap || 0) % 2 ? 'gt-swap-b' : 'gt-swap-a',
       resultText: results.length === 1 ? '1 neumático encontrado' : results.length + ' neumáticos encontrados',
-      onQuery: (e) => this.setState({ query: e.target.value }),
-      tryExample: () => this.setState({ query: '205/55R16' }),
+      onQuery: (e) => {
+        this.setState({ query: e.target.value });
+        /* Se espera a que deje de tipear: si no, la animacion se reiniciaria
+           en cada tecla y parpadearia. */
+        clearTimeout(this._qTimer);
+        this._qTimer = setTimeout(() => this.setState(s => ({ swap: (s.swap || 0) + 1 })), 260);
+      },
+      tryExample: () => this.setState(s => ({ query: '205/55R16', swap: (s.swap || 0) + 1 })),
       goCatalogo: (e) => {
         e.preventDefault();
         const el = document.getElementById('catalogo');
