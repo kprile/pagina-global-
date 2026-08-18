@@ -121,6 +121,37 @@ window.__resources = Object.assign(window.__resources || {}, {
   .gt-brand:hover img{animation:gtLogoWiggle 0.6s ease-in-out;}
   @keyframes gtBadgeBounce{0%,100%{transform:translateY(0);} 30%{transform:translateY(-4px);} 50%{transform:translateY(0);} 70%{transform:translateY(-2px);}}
   .gt-cta-header{animation:gtBadgeBounce 2.4s ease-in-out 1s infinite;}
+
+  /* Las tarjetas entraban las 139 a la vez. Escalonar las primeras da sensacion
+     de carga progresiva sin retrasar el resto. */
+  .gt-card:nth-child(1){animation-delay:0ms}    .gt-card:nth-child(2){animation-delay:45ms}
+  .gt-card:nth-child(3){animation-delay:90ms}   .gt-card:nth-child(4){animation-delay:135ms}
+  .gt-card:nth-child(5){animation-delay:180ms}  .gt-card:nth-child(6){animation-delay:225ms}
+  .gt-card:nth-child(7){animation-delay:270ms}  .gt-card:nth-child(8){animation-delay:315ms}
+  .gt-card:nth-child(9){animation-delay:360ms}  .gt-card:nth-child(10){animation-delay:405ms}
+  .gt-card:nth-child(11){animation-delay:450ms} .gt-card:nth-child(12){animation-delay:495ms}
+
+  html{scroll-behavior:smooth;}
+
+  /* Accesibilidad: quien configura su sistema para reducir movimiento no deberia
+     recibir bucles infinitos ni desplazamientos. El contenido igual queda visible. */
+  @media (prefers-reduced-motion: reduce){
+    *, *::before, *::after{
+      animation-duration:0.01ms !important;
+      animation-iteration-count:1 !important;
+      transition-duration:0.01ms !important;
+      scroll-behavior:auto !important;
+    }
+    .gt-reveal{opacity:1 !important;}
+    .gt-cta::after, .gt-banner-shine{display:none;}
+  }
+
+  /* El contenido es visible por defecto. Solo se oculta para animarlo cuando el
+     JS confirma que esta vivo (agrega .gt-js al <html>). Asi, si el runtime falla,
+     nada queda invisible: es justo lo que pasaba con la seccion "Marcas". */
+  .gt-reveal{opacity:1; animation:none;}
+  html.gt-js .gt-reveal{opacity:0; animation:gtRevealUp 0.7s cubic-bezier(.2,.7,.2,1) forwards; animation-play-state:paused;}
+  html.gt-js .gt-reveal.gt-in{animation-play-state:running;}
 </style>
 </helmet>
 
@@ -195,7 +226,7 @@ window.__resources = Object.assign(window.__resources || {}, {
   </section>
 
   <!-- ============ MAYORISTAS ============ -->
-  <section data-screen-label="Mayoristas" style="position:relative; overflow:hidden; background:#f5b301; color:#141517; padding:18px clamp(20px,5vw,56px);">
+  <section data-screen-label="Mayoristas" class="gt-reveal" style="position:relative; overflow:hidden; background:#f5b301; color:#141517; padding:18px clamp(20px,5vw,56px);">
     <div class="gt-banner-shine"></div>
     <div style="max-width:1100px; margin:0 auto; display:flex; flex-wrap:wrap; align-items:center; justify-content:space-between; gap:12px;">
       <div style="font-family:'Barlow Condensed',sans-serif; font-weight:700; font-size:clamp(19px,2.5vw,24px); text-transform:uppercase; letter-spacing:0.03em;">Precios exclusivos para mayoristas y compradores habituales</div>
@@ -204,7 +235,7 @@ window.__resources = Object.assign(window.__resources || {}, {
   </section>
 
   <!-- ============ CATÁLOGO ============ -->
-  <section id="catalogo" data-screen-label="Catálogo" style="background:#eceae6; color:#1a1b1e; padding:clamp(40px,6vw,72px) clamp(20px,5vw,56px) clamp(56px,8vw,96px);">
+  <section id="catalogo" data-screen-label="Catálogo" class="gt-reveal" style="background:#eceae6; color:#1a1b1e; padding:clamp(40px,6vw,72px) clamp(20px,5vw,56px) clamp(56px,8vw,96px);">
     <div style="max-width:1100px; margin:0 auto;">
       <h2 style="margin:0 0 6px; font-family:'Barlow Condensed',sans-serif; font-weight:800; font-size:clamp(30px,4vw,44px); text-transform:uppercase;">Busca tu medida</h2>
       <p style="margin:0 0 26px; font-size:15px; color:#5a5d63;">Escribe la medida que aparece en el costado de tu neumático, ej. <button onClick="{{ tryExample }}" style="font-family:inherit; font-size:15px; font-weight:600; color:#8a6a00; background:none; border:none; padding:0; cursor:pointer; text-decoration:underline;">205/55R16</button></p>
@@ -264,7 +295,7 @@ window.__resources = Object.assign(window.__resources || {}, {
   </section>
 
   <!-- ============ FOOTER ============ -->
-  <footer data-screen-label="Footer" style="padding:clamp(36px,6vw,60px) clamp(20px,5vw,56px); background:#ffffff; color:#1a1b1e;">
+  <footer data-screen-label="Footer" class="gt-reveal" style="padding:clamp(36px,6vw,60px) clamp(20px,5vw,56px); background:#ffffff; color:#1a1b1e;">
     <div style="max-width:1100px; margin:0 auto; display:flex; flex-wrap:wrap; align-items:center; justify-content:space-between; gap:24px;">
       <div style="display:flex; flex-direction:column; gap:8px;">
         <img src="assets/logo-final.webp" alt="Global Tires" style="height:52px; width:auto; display:block; align-self:flex-start;" />
@@ -337,22 +368,36 @@ class Component extends DCLogic {
         if (header) header.style.boxShadow = y > 8 ? '0 4px 14px rgba(20,21,23,0.12)' : 'none';
         const heroImg = document.getElementById('gtHeroImg');
         if (heroImg) heroImg.style.transform = 'translateY(' + Math.min(40, y * 0.12) + 'px)';
+        if (this._reveal) this._reveal();
       });
     };
     window.addEventListener('scroll', this._onScroll, { passive: true });
-    this._io = new IntersectionObserver((entries) => {
-      entries.forEach(e => { if (e.isIntersecting) e.target.classList.add('gt-in'); });
-    }, { threshold: 0.15 });
-    setTimeout(() => {
-      document.querySelectorAll('.gt-reveal').forEach(el => this._io.observe(el));
-    }, 50);
+    /* Antes se usaba un IntersectionObserver que observaba los nodos una sola vez,
+       50 ms despues de montar. Al cargar los productos el componente re-renderiza y
+       reemplaza esos nodos, de modo que el observer quedaba mirando elementos
+       descartados y la seccion "Marcas" no se mostraba nunca (opacity:0 permanente).
+       Este barrido vuelve a consultar el DOM en cada pasada, asi que sobrevive a los
+       re-render, y se detiene solo cuando ya no queda nada por revelar. */
+    document.documentElement.classList.add('gt-js');
+    this._reveal = () => {
+      const vh = window.innerHeight || 0;
+      document.querySelectorAll('.gt-reveal:not(.gt-in)').forEach(el => {
+        if (el.getBoundingClientRect().top < vh * 0.88) el.classList.add('gt-in');
+      });
+      if (!document.querySelector('.gt-reveal:not(.gt-in)') && this._revealTimer) {
+        clearInterval(this._revealTimer);
+        this._revealTimer = null;
+      }
+    };
+    this._revealTimer = setInterval(this._reveal, 150);
+    this._reveal();
   }
 
   componentWillUnmount() {
     window.removeEventListener('keydown', this._onKey);
     window.removeEventListener('scroll', this._onScroll);
     if (this._countRaf) cancelAnimationFrame(this._countRaf);
-    if (this._io) this._io.disconnect();
+    if (this._revealTimer) clearInterval(this._revealTimer);
   }
 
   ripple = (e) => {
