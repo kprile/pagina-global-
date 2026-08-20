@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html>
+<html lang="es">
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -20,6 +20,8 @@ window.__resources = Object.assign(window.__resources || {}, {
 <helmet>
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Global Tires — Neumáticos importados en Chile</title>
+<meta name="description" content="Importadora directa de neumáticos en Chile: Grenlander, Haida, Tianfu y Joyroad para auto, camioneta y carga. Busca tu medida y cotiza al instante por WhatsApp." />
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Crect width='100' height='100' fill='%23141517'/%3E%3Ccircle cx='50' cy='50' r='34' fill='none' stroke='%23f5b301' stroke-width='8'/%3E%3Ccircle cx='50' cy='50' r='10' fill='%23f5b301'/%3E%3C/svg%3E" />
 <template id="__bundler_thumbnail" data-bg-color="#141517">
   <svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
     <circle cx="50" cy="50" r="34" fill="none" stroke="#f5b301" stroke-width="8"/>
@@ -191,10 +193,11 @@ window.__resources = Object.assign(window.__resources || {}, {
 
   <!-- ============ HEADER ============ -->
   <header data-screen-label="Header" class="gt-header" style="display:flex; align-items:center; justify-content:space-between; gap:16px; padding:12px clamp(20px,5vw,56px); background:#ffffff; position:sticky; top:0; z-index:500; box-shadow:none;">
-    <img src="assets/logo-final.webp" alt="Global Tires" style="height:64px; width:auto; display:block;" />
+    <img width="500" height="209" src="assets/logo-final.webp" alt="Global Tires" style="height:64px; width:auto; display:block;" />
     <a href="#catalogo" onClick="{{ goCatalogo }}" class="gt-cta-header" style="font-family:'Barlow Condensed',sans-serif; font-weight:700; font-size:17px; letter-spacing:0.06em; text-transform:uppercase; color:#1a1b1e; border:1px solid #1a1b1e; padding:8px 18px; border-radius:4px;" style-hover="background:#f5b301; border-color:#f5b301; color:#141517;">Buscar mi medida</a>
   </header>
 
+  <main>
   <!-- ============ HERO ============ -->
   <div id="gtHero" style="position:relative; overflow:hidden;">
     <div style="position:absolute; inset:0; pointer-events:none;">
@@ -239,19 +242,19 @@ window.__resources = Object.assign(window.__resources || {}, {
       <div style="display:grid; grid-template-columns:repeat(auto-fit, minmax(220px, 1fr)); gap:14px;">
         <div class="gt-brand" style="display:flex; flex-direction:column; gap:10px; background:#1c1e21; border:1px solid #26282c; border-radius:8px; padding:16px; transition:transform 0.25s ease, box-shadow 0.25s ease;">
           <div style="background:#ffffff; border-radius:6px; height:110px; overflow:hidden; display:flex; align-items:center; justify-content:center;">
-            <img src="assets/grenlander.webp" alt="Grenlander" style="max-width:100%; max-height:100%; width:auto; height:auto; object-fit:contain; display:block;" />
+            <img width="500" height="135" src="assets/grenlander.webp" alt="Grenlander" style="max-width:100%; max-height:100%; width:auto; height:auto; object-fit:contain; display:block;" />
           </div>
           <div style="font-family:'Barlow Condensed',sans-serif; font-weight:700; font-size:20px; text-transform:uppercase; letter-spacing:0.04em;">Grenlander</div>
         </div>
         <div class="gt-brand" style="display:flex; flex-direction:column; gap:10px; background:#1c1e21; border:1px solid #26282c; border-radius:8px; padding:16px; transition:transform 0.25s ease, box-shadow 0.25s ease;">
           <div style="background:#ffffff; border-radius:6px; height:110px; overflow:hidden; display:flex; align-items:center; justify-content:center;">
-            <img src="assets/haida.webp" alt="Haida" style="max-width:100%; max-height:100%; width:auto; height:auto; object-fit:contain; display:block;" />
+            <img width="500" height="141" src="assets/haida.webp" alt="Haida" style="max-width:100%; max-height:100%; width:auto; height:auto; object-fit:contain; display:block;" />
           </div>
           <div style="font-family:'Barlow Condensed',sans-serif; font-weight:700; font-size:20px; text-transform:uppercase; letter-spacing:0.04em;">Haida</div>
         </div>
         <div class="gt-brand" style="display:flex; flex-direction:column; gap:10px; background:#1c1e21; border:1px solid #26282c; border-radius:8px; padding:16px; transition:transform 0.25s ease, box-shadow 0.25s ease;">
           <div style="background:#ffffff; border-radius:6px; height:110px; overflow:hidden; display:flex; align-items:center; justify-content:center;">
-            <img src="assets/tianfu.webp" alt="Tianfu" style="max-width:100%; max-height:100%; width:auto; height:auto; object-fit:contain; display:block;" />
+            <img width="427" height="449" src="assets/tianfu.webp" alt="Tianfu" style="max-width:100%; max-height:100%; width:auto; height:auto; object-fit:contain; display:block;" />
           </div>
           <div style="font-family:'Barlow Condensed',sans-serif; font-weight:700; font-size:20px; text-transform:uppercase; letter-spacing:0.04em;">Tianfu</div>
         </div>
@@ -328,11 +331,13 @@ window.__resources = Object.assign(window.__resources || {}, {
     </div>
   </section>
 
+  </main>
+
   <!-- ============ FOOTER ============ -->
   <footer data-screen-label="Footer" class="gt-reveal" style="padding:clamp(36px,6vw,60px) clamp(20px,5vw,56px); background:#ffffff; color:#1a1b1e;">
     <div style="max-width:1100px; margin:0 auto; display:flex; flex-wrap:wrap; align-items:center; justify-content:space-between; gap:24px;">
       <div style="display:flex; flex-direction:column; gap:8px;">
-        <img src="assets/logo-final.webp" alt="Global Tires" style="height:52px; width:auto; display:block; align-self:flex-start;" />
+        <img width="500" height="209" src="assets/logo-final.webp" alt="Global Tires" style="height:52px; width:auto; display:block; align-self:flex-start;" />
         <div style="font-size:14px; color:#5a5d63;">Importadora de neumáticos · Chile · globaltires.cl</div>
         <div style="font-size:13px; color:#8b8e94;">Creado por <a href="mailto:kprile@outlook.es" style="color:#8a6a00;">kprile@outlook.es</a></div>
       </div>
