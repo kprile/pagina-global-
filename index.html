@@ -11,8 +11,8 @@ window.__resources = Object.assign(window.__resources || {}, {
   "https://unpkg.com/react-dom@18.3.1/umd/react-dom.production.min.js": "vendor/react-dom.production.min.js"
 });
 </script>
-<script src="vendor/gsap.min.js"></script>
-<script src="vendor/ScrollTrigger.min.js"></script>
+<script defer src="vendor/gsap.min.js"></script>
+<script defer src="vendor/ScrollTrigger.min.js"></script>
 <script src="./support.js"></script>
 </head>
 <body>
@@ -197,6 +197,10 @@ window.__resources = Object.assign(window.__resources || {}, {
   .gt-reveal{opacity:1; animation:none;}
   html.gt-js .gt-reveal{opacity:0; animation:gtRevealUp 0.7s cubic-bezier(.2,.7,.2,1) forwards; animation-play-state:paused;}
   html.gt-js .gt-reveal.gt-in{animation-play-state:running;}
+
+  /* PageSpeed: evita pintar tarjetas muy alejadas del viewport.
+     Conserva el DOM y todos los filtros/busqueda; solo difiere layout/paint. */
+  .gt-card{content-visibility:auto; contain-intrinsic-block-size:260px;}
 </style>
 </helmet>
 
@@ -213,7 +217,7 @@ window.__resources = Object.assign(window.__resources || {}, {
   <div id="gtHero" style="position:relative; overflow:hidden;">
     <div style="position:absolute; inset:0; pointer-events:none;">
       <div id="gtHeroPar" style="position:absolute; left:0; right:0; top:-12%; bottom:-12%; will-change:transform;">
-        <img id="gtHeroImg" src="assets/hero-tire.webp" alt="" style="position:absolute; inset:0; width:100%; height:100%; object-fit:cover; object-position:center right; animation:gtHeroImgIn 1.1s cubic-bezier(.2,.7,.2,1) both;" />
+        <img id="gtHeroImg" src="assets/hero-tire.webp" alt="" fetchpriority="high" loading="eager" decoding="async" style="position:absolute; inset:0; width:100%; height:100%; object-fit:cover; object-position:center right; animation:gtHeroImgIn 1.1s cubic-bezier(.2,.7,.2,1) both;" />
       </div>
       <div style="position:absolute; inset:0; background:linear-gradient(90deg, rgba(10,12,11,0.88) 0%, rgba(10,12,11,0.7) 45%, rgba(10,12,11,0.15) 100%);"></div>
       <div id="gtHeroGlow" style="position:absolute; inset:0; background:radial-gradient(ellipse 60% 80% at 15% 30%, rgba(245,179,1,0.10), transparent 70%); will-change:transform;"></div>
