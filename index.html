@@ -83,6 +83,10 @@ window.__resources = Object.assign(window.__resources || {}, {
 <meta name="ext-resource-dependency" content="assets/models/coloh02-3.webp" data-resource-id="coloh02_3" />
 <meta name="ext-resource-dependency" content="assets/tire-placeholder.svg" data-resource-id="tirePlaceholder" />
 <link rel="preconnect" href="https://fonts.googleapis.com">
+<!-- Los .woff2 se descargan de gstatic, no de googleapis. Sin este preconnect
+     el navegador resuelve DNS y negocia TLS recien al pedir la fuente, lo que
+     alarga el intercambio con la tipografia de respaldo (el salto del h1). -->
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@500;600;700;800&family=Barlow:wght@400;500;600;700&display=swap" rel="stylesheet">
 <script src="data/products.js"></script>
 <script src="data/model-images.js"></script>
