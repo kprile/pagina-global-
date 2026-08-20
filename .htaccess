@@ -6,3 +6,48 @@
   AddHandler application/x-httpd-ea-php81 .php .php8 .phtml
 </IfModule>
 # php -- END cPanel-generated handler, do not edit
+
+# ==========================================================================
+# Rendimiento. Responde a dos avisos de PageSpeed:
+#   "Use efficient cache lifetimes" (~2.193 KiB) y la falta de compresion.
+# Si el hosting no tiene mod_deflate o mod_expires, los <IfModule> hacen que
+# el bloque se ignore en vez de tirar un Error 500.
+# ==========================================================================
+
+# --- Compresion (el texto comprime muchisimo; las imagenes ya vienen
+#     comprimidas y volver a comprimirlas solo gasta CPU) ---
+<IfModule mod_deflate.c>
+  AddOutputFilterByType DEFLATE text/html text/css text/javascript
+  AddOutputFilterByType DEFLATE application/javascript application/x-javascript
+  AddOutputFilterByType DEFLATE image/svg+xml application/json
+</IfModule>
+
+# --- Caducidad de la cache ---
+<IfModule mod_expires.c>
+  ExpiresActive On
+  # Los assets llevan nombre fijo. Un ano es lo que pide PageSpeed; si cambias
+  # una imagen sin renombrarla, los visitantes que ya la tengan veran la vieja:
+  # en ese caso renombrala (por ejemplo hd667-1-v2.webp).
+  ExpiresByType image/webp              "access plus 1 year"
+  ExpiresByType image/svg+xml           "access plus 1 year"
+  ExpiresByType font/woff2              "access plus 1 year"
+  ExpiresByType text/css                "access plus 1 year"
+  ExpiresByType application/javascript  "access plus 1 month"
+  ExpiresByType text/javascript         "access plus 1 month"
+  # El HTML no se cachea: es el que decide que version de todo lo demas se usa.
+  ExpiresByType text/html               "access plus 0 seconds"
+</IfModule>
+
+<IfModule mod_headers.c>
+  <FilesMatch "\.(webp|svg|woff2)$">
+    Header set Cache-Control "public, max-age=31536000, immutable"
+  </FilesMatch>
+  <FilesMatch "\.html$">
+    Header set Cache-Control "no-cache"
+  </FilesMatch>
+</IfModule>
+
+# --- Tipo MIME de woff2, que algunos Apache viejos no traen ---
+<IfModule mod_mime.c>
+  AddType font/woff2 .woff2
+</IfModule>
