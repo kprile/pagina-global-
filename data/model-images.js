@@ -170,8 +170,8 @@ window.GT_MODEL_IMAGES = {
  },
  "RX566": {
   "images": [
-   "assets/models/rx566-2.webp",
    "assets/models/rx566-3.webp",
+   "assets/models/rx566-2.webp",
    "assets/models/rx566-1.webp"
   ],
   "features": [
