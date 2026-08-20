@@ -1,5 +1,3 @@
-
-
 # php -- BEGIN cPanel-generated handler, do not edit
 # Set the “ea-php81” package as the default “PHP” programming language.
 <IfModule mime_module>
@@ -8,33 +6,32 @@
 # php -- END cPanel-generated handler, do not edit
 
 # ==========================================================================
-# Rendimiento. Responde a dos avisos de PageSpeed:
-#   "Use efficient cache lifetimes" (~2.193 KiB) y la falta de compresion.
-# Si el hosting no tiene mod_deflate o mod_expires, los <IfModule> hacen que
-# el bloque se ignore en vez de tirar un Error 500.
+# Global Tires - rendimiento para Apache/cPanel
 # ==========================================================================
 
-# --- Compresion (el texto comprime muchisimo; las imagenes ya vienen
-#     comprimidas y volver a comprimirlas solo gasta CPU) ---
+# --- Brotli cuando el servidor lo soporte ---
+<IfModule mod_brotli.c>
+  AddOutputFilterByType BROTLI_COMPRESS text/html text/css text/javascript
+  AddOutputFilterByType BROTLI_COMPRESS application/javascript application/x-javascript
+  AddOutputFilterByType BROTLI_COMPRESS image/svg+xml application/json
+</IfModule>
+
+# --- Gzip como respaldo ---
 <IfModule mod_deflate.c>
   AddOutputFilterByType DEFLATE text/html text/css text/javascript
   AddOutputFilterByType DEFLATE application/javascript application/x-javascript
   AddOutputFilterByType DEFLATE image/svg+xml application/json
 </IfModule>
 
-# --- Caducidad de la cache ---
+# --- Cache ---
 <IfModule mod_expires.c>
   ExpiresActive On
-  # Los assets llevan nombre fijo. Un ano es lo que pide PageSpeed; si cambias
-  # una imagen sin renombrarla, los visitantes que ya la tengan veran la vieja:
-  # en ese caso renombrala (por ejemplo hd667-1-v2.webp).
   ExpiresByType image/webp              "access plus 1 year"
   ExpiresByType image/svg+xml           "access plus 1 year"
   ExpiresByType font/woff2              "access plus 1 year"
   ExpiresByType text/css                "access plus 1 year"
   ExpiresByType application/javascript  "access plus 1 month"
   ExpiresByType text/javascript         "access plus 1 month"
-  # El HTML no se cachea: es el que decide que version de todo lo demas se usa.
   ExpiresByType text/html               "access plus 0 seconds"
 </IfModule>
 
@@ -42,12 +39,27 @@
   <FilesMatch "\.(webp|svg|woff2)$">
     Header set Cache-Control "public, max-age=31536000, immutable"
   </FilesMatch>
-  <FilesMatch "\.html$">
-    Header set Cache-Control "no-cache"
+  <FilesMatch "\.(js|css)$">
+    Header set Cache-Control "public, max-age=2592000"
   </FilesMatch>
+  <FilesMatch "\.html$">
+    Header set Cache-Control "no-cache, must-revalidate"
+  </FilesMatch>
+
+  # Permite que el navegador establezca conexiones y descargue recursos
+  # importantes lo antes posible sin alterar el HTML generado.
+  Header add Link "</assets/hero-tire.webp>; rel=preload; as=image; type=image/webp"
+  Header add Link "</assets/fonts/barlow-condensed-latin-800-normal.woff2>; rel=preload; as=font; type=font/woff2; crossorigin"
 </IfModule>
 
-# --- Tipo MIME de woff2, que algunos Apache viejos no traen ---
+# --- Tipo MIME de woff2 para Apache antiguos ---
 <IfModule mod_mime.c>
   AddType font/woff2 .woff2
+  AddType image/webp .webp
 </IfModule>
+
+# --- Evitar ETag redundante cuando se usan expiraciones largas ---
+<IfModule mod_headers.c>
+  Header unset ETag
+</IfModule>
+FileETag None
