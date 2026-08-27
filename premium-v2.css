@@ -1,0 +1,105 @@
+/* Global Tires Premium V2 — experiencia cinematografica */
+
+:root{--gt-gold:#f5b301;--gt-ink:#07090a;--gt-ink2:#0d1012;--gt-white:#f4f1ea;--gt-muted:#a8adb2;}
+
+/* Hero claramente mas dramatico */
+#gtHero{min-height:100svh!important;background:#050607!important;}
+#gtHeroCopy{min-height:calc(100svh - 72px)!important;max-width:1500px!important;padding-left:clamp(24px,6vw,92px)!important;padding-right:clamp(24px,6vw,92px)!important;}
+#gtHeroCopy h1{font-size:clamp(64px,9.4vw,146px)!important;line-height:.82!important;max-width:1100px!important;letter-spacing:-.04em!important;}
+#gtHeroImg{transform:scale(1.05);filter:contrast(1.12) brightness(.67) saturate(.82)!important;}
+#gtHero::after{font-size:clamp(120px,19vw,310px)!important;color:rgba(255,255,255,.018)!important;}
+
+/* Storytelling central */
+.gt-cinematic-story{
+  position:relative;
+  height:340vh;
+  background:
+    radial-gradient(circle at 70% 38%,rgba(245,179,1,.085),transparent 27%),
+    linear-gradient(180deg,#080a0b 0%,#020304 55%,#0b0d0f 100%);
+  color:var(--gt-white);
+  overflow:clip;
+}
+.gt-story-sticky{
+  position:sticky;
+  top:0;
+  height:100svh;
+  display:grid;
+  grid-template-columns:minmax(0,1fr) minmax(320px,.72fr);
+  align-items:center;
+  gap:clamp(20px,5vw,90px);
+  padding:clamp(30px,5vw,76px);
+  isolation:isolate;
+}
+.gt-story-sticky::before{
+  content:'GLOBAL';
+  position:absolute;
+  left:-.04em;
+  bottom:-.12em;
+  z-index:-1;
+  font-family:'Barlow Condensed',sans-serif;
+  font-size:clamp(180px,29vw,520px);
+  font-weight:800;
+  line-height:.75;
+  letter-spacing:-.06em;
+  color:rgba(255,255,255,.018);
+  pointer-events:none;
+}
+.gt-story-media{position:relative;height:min(76vh,820px);display:grid;place-items:center;perspective:1200px;}
+.gt-story-halo{
+  position:absolute;width:min(58vw,720px);aspect-ratio:1;border-radius:50%;
+  background:radial-gradient(circle,rgba(245,179,1,.18) 0%,rgba(245,179,1,.055) 31%,transparent 68%);
+  filter:blur(10px);transform:scale(.75);opacity:.65;
+}
+.gt-story-ring{
+  position:absolute;width:min(43vw,590px);aspect-ratio:1;border-radius:50%;
+  border:1px solid rgba(255,255,255,.09);box-shadow:0 0 80px rgba(245,179,1,.045) inset;
+}
+.gt-story-ring::before,.gt-story-ring::after{content:'';position:absolute;border-radius:50%;inset:8%;border:1px solid rgba(255,255,255,.045);}
+.gt-story-ring::after{inset:20%;border-color:rgba(245,179,1,.08);}
+.gt-story-tire{
+  position:relative;z-index:2;width:min(61vw,820px);height:min(75vh,810px);object-fit:contain;
+  filter:drop-shadow(0 38px 58px rgba(0,0,0,.62)) contrast(1.08) saturate(.88);
+  transform-origin:center;will-change:transform,filter;pointer-events:none;
+}
+.gt-story-copy{position:relative;z-index:3;max-width:560px;min-height:430px;display:grid;align-content:center;}
+.gt-story-kicker{font-family:'Barlow Condensed',sans-serif;font-size:13px;font-weight:600;letter-spacing:.32em;text-transform:uppercase;color:var(--gt-gold);margin-bottom:32px;}
+.gt-story-step{position:absolute;left:0;right:0;top:50%;transform:translateY(calc(-50% + 35px));opacity:0;transition:opacity .42s ease,transform .55s cubic-bezier(.2,.72,.2,1);pointer-events:none;}
+.gt-story-step.is-active{opacity:1;transform:translateY(-50%);}
+.gt-story-step small{display:block;font-family:'Barlow Condensed',sans-serif;font-size:13px;letter-spacing:.22em;text-transform:uppercase;color:#757b80;margin-bottom:18px;}
+.gt-story-step h2{font-family:'Barlow Condensed',sans-serif;font-size:clamp(48px,5.5vw,88px);line-height:.9;text-transform:uppercase;letter-spacing:-.025em;margin:0 0 22px;color:var(--gt-white);}
+.gt-story-step p{font-size:clamp(16px,1.4vw,20px);line-height:1.6;color:#aeb3b8;margin:0;max-width:500px;}
+.gt-story-progress{position:absolute;right:clamp(22px,3vw,48px);top:50%;transform:translateY(-50%);display:flex;flex-direction:column;gap:11px;z-index:4;}
+.gt-story-dot{width:4px;height:24px;background:rgba(255,255,255,.16);border-radius:99px;transition:height .35s ease,background .35s ease;}
+.gt-story-dot.is-active{height:54px;background:var(--gt-gold);}
+.gt-story-scroll-label{position:absolute;left:50%;bottom:24px;transform:translateX(-50%);font-size:11px;letter-spacing:.28em;text-transform:uppercase;color:#6f7479;display:flex;align-items:center;gap:12px;}
+.gt-story-scroll-label::before{content:'';width:32px;height:1px;background:var(--gt-gold);}
+
+/* Transicion de salida hacia marcas */
+.gt-cinematic-story + section{border-top:1px solid rgba(255,255,255,.07)!important;}
+
+/* Vista de marcas mas editorial */
+main > section.gt-reveal:first-of-type .gt-brand{transform-origin:center bottom;}
+main > section.gt-reveal:first-of-type .gt-brand img{transition:transform .55s cubic-bezier(.2,.7,.2,1),filter .45s ease;}
+main > section.gt-reveal:first-of-type .gt-brand:hover img{transform:scale(1.08);filter:contrast(1.05);}
+
+@media(max-width:899px){
+  .gt-cinematic-story{height:300vh;}
+  .gt-story-sticky{grid-template-columns:1fr;grid-template-rows:54vh 1fr;padding:18px 20px 30px;gap:0;}
+  .gt-story-media{height:54vh;align-self:end;}
+  .gt-story-tire{width:min(110vw,620px);height:56vh;}
+  .gt-story-ring{width:min(84vw,480px);}
+  .gt-story-halo{width:min(100vw,560px);}
+  .gt-story-copy{min-height:36vh;align-self:start;padding-top:10px;}
+  .gt-story-kicker{margin-bottom:10px;font-size:11px;}
+  .gt-story-step{top:54%;}
+  .gt-story-step h2{font-size:clamp(44px,13vw,70px);}
+  .gt-story-step p{font-size:15px;line-height:1.5;}
+  .gt-story-progress{right:14px;top:43%;}
+  .gt-story-dot{height:16px;}.gt-story-dot.is-active{height:34px;}
+  .gt-story-scroll-label{display:none;}
+  #gtHeroCopy h1{font-size:clamp(56px,16vw,88px)!important;}
+}
+
+@media(prefers-reduced-motion:reduce){
+  .gt-story-tire,.gt-story-step{transition:none!important;}
+}
