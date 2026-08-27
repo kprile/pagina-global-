@@ -1,0 +1,255 @@
+/* Global Tires — Premium cinematic layer
+   Inspirado en la jerarquia visual y el ritmo de producto de sitios de lujo,
+   sin copiar su diseño. Carga ligera: solo CSS, sin librerias externas. */
+
+:root{
+  --gt-premium-bg:#0b0d0f;
+  --gt-premium-panel:#111417;
+  --gt-premium-line:rgba(255,255,255,.09);
+  --gt-premium-text:#f3f1ec;
+  --gt-premium-muted:#a9adb3;
+  --gt-premium-accent:#f5b301;
+}
+
+html{scroll-behavior:smooth;}
+body{background:var(--gt-premium-bg)!important;}
+
+/* Header: limpio y premium, sin sacrificar legibilidad del logo */
+.gt-header{
+  background:rgba(255,255,255,.94)!important;
+  backdrop-filter:blur(16px) saturate(130%);
+  -webkit-backdrop-filter:blur(16px) saturate(130%);
+  border-bottom:1px solid rgba(20,21,23,.08);
+  transition:padding .35s ease, background .35s ease, box-shadow .35s ease!important;
+}
+.gt-header.gt-premium-scrolled{
+  padding-top:8px!important;
+  padding-bottom:8px!important;
+  box-shadow:0 14px 40px rgba(0,0,0,.12)!important;
+}
+.gt-header img{transition:height .35s ease, transform .35s ease;}
+.gt-header.gt-premium-scrolled img{height:54px!important;}
+.gt-cta-header{
+  border-radius:999px!important;
+  padding:10px 20px!important;
+  transition:transform .25s ease, background .25s ease, color .25s ease!important;
+}
+.gt-cta-header:hover{transform:translateY(-2px);}
+
+/* HERO cinematografico */
+#gtHero{
+  min-height:clamp(640px,88vh,940px);
+  background:#080a0c;
+  isolation:isolate;
+  border-bottom:1px solid var(--gt-premium-line);
+}
+#gtHero::before{
+  content:'';
+  position:absolute;
+  inset:0;
+  z-index:0;
+  pointer-events:none;
+  background:
+    radial-gradient(circle at var(--gt-spot-x,78%) var(--gt-spot-y,28%), rgba(245,179,1,.14), transparent 26%),
+    linear-gradient(180deg, rgba(4,5,6,.08) 0%, rgba(4,5,6,.14) 46%, rgba(4,5,6,.75) 100%);
+}
+#gtHero::after{
+  content:'GLOBAL TIRES';
+  position:absolute;
+  left:clamp(18px,4vw,56px);
+  right:0;
+  bottom:-.08em;
+  z-index:0;
+  overflow:hidden;
+  white-space:nowrap;
+  pointer-events:none;
+  font-family:'Barlow Condensed',sans-serif;
+  font-size:clamp(88px,16vw,250px);
+  line-height:.72;
+  font-weight:800;
+  letter-spacing:-.035em;
+  color:rgba(255,255,255,.022);
+  text-transform:uppercase;
+}
+#gtHero > div:first-child{z-index:-1!important;}
+#gtHeroPar{
+  top:-8%!important;
+  bottom:-8%!important;
+  transform-origin:70% 50%;
+}
+#gtHeroImg{
+  object-position:68% center!important;
+  filter:contrast(1.06) saturate(.92) brightness(.82);
+}
+#gtHero > div:first-child > div:nth-child(2){
+  background:linear-gradient(90deg,rgba(7,9,10,.96) 0%,rgba(7,9,10,.82) 35%,rgba(7,9,10,.35) 67%,rgba(7,9,10,.12) 100%)!important;
+}
+#gtHeroCopy{
+  min-height:clamp(620px,80vh,850px);
+  max-width:1320px!important;
+  align-content:flex-end;
+  align-items:flex-end!important;
+  padding-top:clamp(90px,12vw,160px)!important;
+  padding-bottom:clamp(50px,7vw,88px)!important;
+}
+#gtHeroCopy > div:first-child{
+  max-width:760px;
+  position:relative;
+  z-index:2;
+}
+#gtHeroCopy > div:first-child > div:first-child{
+  display:inline-flex;
+  align-items:center;
+  gap:10px;
+  font-size:13px!important;
+  letter-spacing:.24em!important;
+  padding:8px 12px;
+  border:1px solid rgba(245,179,1,.35);
+  border-radius:999px;
+  background:rgba(245,179,1,.06);
+  backdrop-filter:blur(6px);
+}
+#gtHeroCopy h1{
+  font-size:clamp(54px,8.3vw,118px)!important;
+  line-height:.86!important;
+  letter-spacing:-.025em!important;
+  max-width:980px;
+  margin-top:22px!important;
+  text-shadow:0 10px 45px rgba(0,0,0,.32);
+}
+#gtHeroCopy p{
+  max-width:620px!important;
+  color:#c0c3c7!important;
+  font-size:clamp(16px,1.55vw,20px)!important;
+}
+#gtHeroCopy .gt-cta{
+  border-radius:999px!important;
+  padding:17px 30px!important;
+  box-shadow:0 18px 44px rgba(245,179,1,.16);
+  transition:transform .25s ease, box-shadow .25s ease, background .25s ease!important;
+}
+#gtHeroCopy .gt-cta:hover{
+  transform:translateY(-3px);
+  box-shadow:0 24px 56px rgba(245,179,1,.25);
+}
+#gtHeroCopy > div:nth-child(2){opacity:.1;}
+#gtHeroCopy > div:last-child{
+  background:rgba(11,13,15,.46);
+  border:1px solid rgba(255,255,255,.08)!important;
+  border-radius:18px;
+  padding:20px 24px!important;
+  backdrop-filter:blur(12px);
+  -webkit-backdrop-filter:blur(12px);
+  gap:clamp(22px,4vw,48px)!important;
+}
+#gtHeroCopy .gt-stat > div:first-child{font-size:clamp(24px,2.5vw,34px)!important;}
+
+/* Primera transicion: marcas como vitrinas de producto */
+main > section.gt-reveal:first-of-type{
+  position:relative;
+  overflow:hidden;
+  background:
+    radial-gradient(circle at 10% 0%,rgba(245,179,1,.07),transparent 28%),
+    linear-gradient(180deg,#0c0f11 0%,#111417 100%)!important;
+  border-top:0!important;
+  padding-top:clamp(70px,9vw,130px)!important;
+  padding-bottom:clamp(70px,9vw,130px)!important;
+}
+main > section.gt-reveal:first-of-type::before{
+  content:'NUESTRAS MARCAS';
+  position:absolute;
+  right:-.01em;
+  top:.02em;
+  font-family:'Barlow Condensed',sans-serif;
+  font-weight:800;
+  font-size:clamp(70px,11vw,170px);
+  line-height:1;
+  color:rgba(255,255,255,.025);
+  pointer-events:none;
+}
+main > section.gt-reveal:first-of-type > div{max-width:1280px!important;}
+main > section.gt-reveal:first-of-type > div > div:first-child{
+  color:#d0d3d7!important;
+  font-size:13px!important;
+  letter-spacing:.28em!important;
+  margin-bottom:30px!important;
+}
+main > section.gt-reveal:first-of-type .gt-brand{
+  background:linear-gradient(180deg,#171b1f 0%,#101316 100%)!important;
+  border:1px solid rgba(255,255,255,.08)!important;
+  border-radius:18px!important;
+  padding:18px!important;
+  min-height:230px;
+  box-shadow:0 26px 70px rgba(0,0,0,.18);
+  position:relative;
+  overflow:hidden;
+  transition:transform .35s cubic-bezier(.2,.7,.2,1), border-color .35s ease, box-shadow .35s ease!important;
+}
+main > section.gt-reveal:first-of-type .gt-brand::after{
+  content:'';
+  position:absolute;
+  inset:auto 14% -28% 14%;
+  height:70px;
+  background:radial-gradient(ellipse,rgba(245,179,1,.16),transparent 70%);
+  filter:blur(12px);
+  opacity:0;
+  transition:opacity .35s ease;
+}
+main > section.gt-reveal:first-of-type .gt-brand:hover{
+  transform:translateY(-8px)!important;
+  border-color:rgba(245,179,1,.35)!important;
+  box-shadow:0 34px 90px rgba(0,0,0,.28)!important;
+}
+main > section.gt-reveal:first-of-type .gt-brand:hover::after{opacity:1;}
+main > section.gt-reveal:first-of-type .gt-brand > div:first-child{
+  height:150px!important;
+  border-radius:12px!important;
+  background:#fff!important;
+}
+main > section.gt-reveal:first-of-type .gt-brand > div:last-child{
+  color:#f3f1ec!important;
+  font-size:24px!important;
+  letter-spacing:.06em!important;
+}
+
+/* Aparicion cinematografica por secciones */
+.gt-premium-reveal{
+  opacity:0;
+  transform:translateY(34px);
+  transition:opacity .8s cubic-bezier(.2,.7,.2,1), transform .8s cubic-bezier(.2,.7,.2,1);
+}
+.gt-premium-reveal.gt-premium-in{opacity:1;transform:none;}
+
+/* Catalogo: mas limpio, sin cambiar funcionalidad */
+#catalogo{position:relative;}
+#catalogo .gt-card{
+  border-radius:16px!important;
+  overflow:hidden;
+  transition:transform .32s cubic-bezier(.2,.7,.2,1), box-shadow .32s ease, border-color .32s ease!important;
+}
+#catalogo .gt-card:hover{
+  transform:translateY(-7px)!important;
+  box-shadow:0 24px 55px rgba(20,21,23,.17)!important;
+}
+
+@media (max-width:899px){
+  #gtHero{min-height:700px;}
+  #gtHero::after{font-size:22vw;bottom:.02em;}
+  #gtHeroImg{object-position:62% center!important;}
+  #gtHero > div:first-child > div:nth-child(2){
+    background:linear-gradient(180deg,rgba(7,9,10,.2) 0%,rgba(7,9,10,.45) 38%,rgba(7,9,10,.94) 76%,rgba(7,9,10,.98) 100%)!important;
+  }
+  #gtHeroCopy{
+    min-height:700px;
+    align-content:flex-end;
+    padding-top:220px!important;
+  }
+  #gtHeroCopy h1{font-size:clamp(48px,15vw,76px)!important;}
+  #gtHeroCopy > div:nth-child(2){display:none;}
+  #gtHeroCopy > div:last-child{padding:16px!important;gap:18px!important;}
+  .gt-header img{height:54px!important;}
+}
+
+@media (prefers-reduced-motion:reduce){
+  .gt-premium-reveal{opacity:1!important;transform:none!important;transition:none!important;}
+}
