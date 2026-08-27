@@ -1,0 +1,72 @@
+name: Fix hero startup flicker
+
+on:
+  push:
+    branches:
+      - opt/pagespeed-2026-08-20
+    paths:
+      - .github/workflows/fix-hero-flicker.yml
+
+permissions:
+  contents: write
+
+jobs:
+  patch-index:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: opt/pagespeed-2026-08-20
+
+      - name: Remove late GSAP hero initialization
+        shell: python
+        run: |
+          from pathlib import Path
+
+          path = Path('index.html')
+          html = path.read_text(encoding='utf-8')
+          original = html
+
+          replacements = [
+              ('<script defer src="vendor/gsap.min.js"></script>\n', ''),
+              ('<script defer src="vendor/ScrollTrigger.min.js"></script>\n', ''),
+          ]
+
+          for old, new in replacements:
+              if old not in html:
+                  raise SystemExit(f'Missing expected pattern: {old!r}')
+              html = html.replace(old, new, 1)
+
+          if html == original:
+              raise SystemExit('No changes made')
+
+          path.write_text(html, encoding='utf-8')
+
+      - name: Validate stable hero fallback
+        shell: python
+        run: |
+          from pathlib import Path
+          html = Path('index.html').read_text(encoding='utf-8')
+          forbidden = [
+              '<script defer src="vendor/gsap.min.js"></script>',
+              '<script defer src="vendor/ScrollTrigger.min.js"></script>',
+          ]
+          present = [x for x in forbidden if x in html]
+          if present:
+              raise SystemExit('GSAP scripts still present: ' + ', '.join(present))
+          required = [
+              'if (!this._noMotion && !this._gsapOn)',
+              'fetchpriority="high" loading="eager" decoding="async"',
+              'content-visibility:auto',
+          ]
+          missing = [x for x in required if x not in html]
+          if missing:
+              raise SystemExit('Missing fallback/PageSpeed checks: ' + ', '.join(missing))
+
+      - name: Commit flicker fix
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add -- index.html
+          git commit -m "Eliminar doble parpadeo del hero al iniciar" || exit 0
+          git push origin HEAD:opt/pagespeed-2026-08-20
