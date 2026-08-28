@@ -1,6 +1,6 @@
-/* Global Tires V3.1 — reemplazo estructural visual sin tocar catálogo/runtime */
+/* Global Tires V3.2 — estructura + motion 2026 sin cambiar identidad de color */
 (() => {
-  const V = '20260828-v31';
+  const V = '20260828-v32';
   const reduced = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 
   function loadCss(){
@@ -9,24 +9,22 @@
       l.id='gt-v3-css'; l.rel='stylesheet'; l.href='./premium-v3.css?v='+V;
       document.head.appendChild(l);
     }
+    if (!document.getElementById('gt-motion-css')) {
+      const l=document.createElement('link');
+      l.id='gt-motion-css'; l.rel='stylesheet'; l.href='./premium-motion.css?v='+V;
+      document.head.appendChild(l);
+    }
     if (!document.getElementById('gt-v31-fixes')) {
       const s=document.createElement('style');
       s.id='gt-v31-fixes';
       s.textContent=`
         .gt-v3-story-media{overflow:visible!important;min-width:0!important;}
-        .gt-v3-story-tire{width:min(45vw,610px)!important;height:min(66vh,650px)!important;object-fit:contain!important;object-position:center!important;transform-origin:center center!important;filter:drop-shadow(0 42px 60px rgba(0,0,0,.72)) contrast(1.08) saturate(.92)!important;}
+        .gt-v3-story-tire{width:min(45vw,610px)!important;height:min(66vh,650px)!important;object-fit:contain!important;object-position:center!important;transform-origin:center center!important;filter:drop-shadow(0 42px 60px rgba(0,0,0,.52)) contrast(1.04)!important;}
         .gt-v3-story-ring{width:min(41vw,610px)!important;max-width:610px!important;}
-        .gt-v3-story-progress{z-index:12!important;right:clamp(6px,1vw,18px)!important;padding:12px 10px!important;background:rgba(5,6,7,.52)!important;border:1px solid rgba(255,255,255,.06)!important;backdrop-filter:blur(10px)!important;}
+        .gt-v3-story-progress{z-index:12!important;right:clamp(6px,1vw,18px)!important;padding:12px 10px!important;background:rgba(20,21,23,.48)!important;border:1px solid rgba(255,255,255,.06)!important;backdrop-filter:blur(10px)!important;}
         .gt-v3-story-progress i{cursor:pointer!important;width:4px!important;}
         .gt-v3-story-progress i.is-active{height:74px!important;}
-        .gt-v3-step{transition:opacity .55s ease,transform .65s cubic-bezier(.2,.75,.2,1)!important;}
-        .gt-v3-story.is-autoplay .gt-v3-step.is-active{animation:gtV31StepIn .7s cubic-bezier(.2,.75,.2,1) both;}
-        @keyframes gtV31StepIn{from{opacity:0;transform:translateY(calc(-50% + 38px))}to{opacity:1;transform:translateY(-50%)}}
-        @media(max-width:980px){
-          .gt-v3-story-tire{width:min(82vw,500px)!important;height:42vh!important;}
-          .gt-v3-story-ring{width:min(72vw,470px)!important;}
-          .gt-v3-story-progress{right:8px!important;}
-        }
+        @media(max-width:980px){.gt-v3-story-tire{width:min(82vw,500px)!important;height:42vh!important}.gt-v3-story-ring{width:min(72vw,470px)!important}.gt-v3-story-progress{right:8px!important}}
       `;
       document.head.appendChild(s);
     }
@@ -122,6 +120,7 @@
     }
 
     initStory(story);
+    setupMotion(hero,story,data);
     return true;
   }
 
@@ -146,13 +145,13 @@
       if(fromAuto){story.classList.remove('is-autoplay');void story.offsetWidth;story.classList.add('is-autoplay');}
     };
 
-    dots.forEach((d,i)=>d.addEventListener('click',()=>{show(i);restartAuto();}));
-
     const restartAuto=()=>{
       clearInterval(autoTimer);
       if(reduced) return;
       autoTimer=setInterval(()=>{if(visible && !userScrolling)show(current+1,true)},4200);
     };
+
+    dots.forEach((d,i)=>d.addEventListener('click',()=>{show(i);restartAuto();}));
 
     const updateFromScroll=()=>{
       raf=0;
@@ -179,6 +178,65 @@
 
     show(0);restartAuto();
     if(!reduced){addEventListener('scroll',onScroll,{passive:true});addEventListener('resize',onScroll,{passive:true});}
+  }
+
+  function setupMotion(hero,story,data){
+    if(document.querySelector('.gt-motion-progress')) return;
+
+    const progress=document.createElement('div');
+    progress.className='gt-motion-progress'; progress.innerHTML='<i></i>';
+    document.body.appendChild(progress);
+    const bar=progress.firstElementChild;
+
+    const pointer=document.createElement('div'); pointer.className='gt-pointer-light'; document.body.appendChild(pointer);
+    if(!reduced && matchMedia('(pointer:fine)').matches){
+      addEventListener('pointermove',e=>{pointer.style.transform=`translate3d(${e.clientX-140}px,${e.clientY-140}px,0)`},{passive:true});
+    }
+
+    const title=hero.querySelector('.gt-v3-title');
+    if(title){title.innerHTML='<span class="gt-word"><span>Tracción</span></span><span class="gt-word"><span>sin concesiones</span></span>';}
+
+    const revealTargets=[...hero.querySelectorAll('.gt-v3-eyebrow,.gt-v3-lead,.gt-v3-actions'),...data.querySelectorAll('.gt-v3-data-item')];
+    revealTargets.forEach(el=>el.classList.add('gt-reveal-mask'));
+    if('IntersectionObserver' in window){
+      const io=new IntersectionObserver(entries=>entries.forEach(x=>{if(x.isIntersecting){x.target.classList.add('is-visible');io.unobserve(x.target)}}),{threshold:.15,rootMargin:'0px 0px -6% 0px'});
+      revealTargets.forEach(el=>io.observe(el));
+    }else revealTargets.forEach(el=>el.classList.add('is-visible'));
+
+    const marquee=document.createElement('section');
+    marquee.className='gt-motion-marquee';
+    const items=['GRENlander','HAIDA','TIANFU','AUTO','SUV','CARGA','IMPORTACIÓN DIRECTA','STOCK REAL'];
+    marquee.innerHTML='<div class="gt-motion-track">'+[...items,...items].map(x=>`<span>${x}</span>`).join('')+'</div>';
+    story.after(marquee);
+
+    document.querySelectorAll('.gt-v3-primary,.gt-v3-secondary,.gt-cta-header').forEach(btn=>{
+      btn.classList.add('gt-magnetic');
+      if(reduced || !matchMedia('(pointer:fine)').matches) return;
+      btn.addEventListener('pointermove',e=>{const r=btn.getBoundingClientRect();const x=(e.clientX-r.left-r.width/2)*.16;const y=(e.clientY-r.top-r.height/2)*.18;btn.style.transform=`translate3d(${x}px,${y}px,0)`});
+      btn.addEventListener('pointerleave',()=>btn.style.transform='');
+    });
+
+    const visual=hero.querySelector('.gt-v3-visual');
+    if(visual && !reduced && matchMedia('(pointer:fine)').matches){
+      visual.classList.add('is-reactive');
+      visual.addEventListener('pointermove',e=>{const r=visual.getBoundingClientRect();const nx=(e.clientX-r.left)/r.width-.5;const ny=(e.clientY-r.top)/r.height-.5;visual.style.setProperty('--rx',(nx*7).toFixed(2)+'deg');visual.style.setProperty('--ry',(-ny*7).toFixed(2)+'deg')},{passive:true});
+      visual.addEventListener('pointerleave',()=>{visual.style.setProperty('--rx','0deg');visual.style.setProperty('--ry','0deg')});
+    }
+
+    const bindTilt=el=>{
+      if(reduced || !matchMedia('(pointer:fine)').matches || el.dataset.gtTilt) return;
+      el.dataset.gtTilt='1';
+      el.addEventListener('pointermove',e=>{const r=el.getBoundingClientRect();const nx=(e.clientX-r.left)/r.width-.5;const ny=(e.clientY-r.top)/r.height-.5;el.style.setProperty('--tilt-y',(nx*7).toFixed(2)+'deg');el.style.setProperty('--tilt-x',(-ny*5).toFixed(2)+'deg');el.classList.add('gt-tilt')},{passive:true});
+      el.addEventListener('pointerleave',()=>{el.classList.remove('gt-tilt');el.style.removeProperty('--tilt-x');el.style.removeProperty('--tilt-y')});
+    };
+    const scanCards=()=>document.querySelectorAll('.gt-card,.gt-brand').forEach(bindTilt);
+    scanCards(); setInterval(scanCards,1200);
+
+    let raf=0;
+    const updateProgress=()=>{raf=0;const max=Math.max(1,document.documentElement.scrollHeight-innerHeight);bar.style.transform=`scaleX(${Math.max(0,Math.min(1,scrollY/max))})`;};
+    addEventListener('scroll',()=>{if(!raf)raf=requestAnimationFrame(updateProgress)},{passive:true});
+    addEventListener('resize',()=>{if(!raf)raf=requestAnimationFrame(updateProgress)},{passive:true});
+    updateProgress();
   }
 
   function boot(){
