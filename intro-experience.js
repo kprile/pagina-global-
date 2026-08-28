@@ -57,9 +57,10 @@
       ['04 · Salida', 'Explora<br>el catálogo']
     ];
 
+    const wiredDots = new WeakSet();
     const prepareDots = () => dots.forEach((dot, index) => {
-      if (dot.dataset.controlReady === 'true') return;
-      dot.dataset.controlReady = 'true';
+      if (wiredDots.has(dot)) return;
+      wiredDots.add(dot);
       dot.setAttribute('role', 'button');
       dot.setAttribute('tabindex', '0');
       dot.setAttribute('aria-label', `Ir a escena ${index + 1}`);
