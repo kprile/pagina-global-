@@ -9,29 +9,26 @@
 # Global Tires - rendimiento para Apache/cPanel
 # ==========================================================================
 
-# --- Brotli cuando el servidor lo soporte ---
 <IfModule mod_brotli.c>
   AddOutputFilterByType BROTLI_COMPRESS text/html text/css text/javascript
   AddOutputFilterByType BROTLI_COMPRESS application/javascript application/x-javascript
   AddOutputFilterByType BROTLI_COMPRESS image/svg+xml application/json
 </IfModule>
 
-# --- Gzip como respaldo ---
 <IfModule mod_deflate.c>
   AddOutputFilterByType DEFLATE text/html text/css text/javascript
   AddOutputFilterByType DEFLATE application/javascript application/x-javascript
   AddOutputFilterByType DEFLATE image/svg+xml application/json
 </IfModule>
 
-# --- Cache ---
 <IfModule mod_expires.c>
   ExpiresActive On
   ExpiresByType image/webp              "access plus 1 year"
   ExpiresByType image/svg+xml           "access plus 1 year"
   ExpiresByType font/woff2              "access plus 1 year"
-  ExpiresByType text/css                "access plus 1 year"
-  ExpiresByType application/javascript  "access plus 1 month"
-  ExpiresByType text/javascript         "access plus 1 month"
+  ExpiresByType text/css                "access plus 0 seconds"
+  ExpiresByType application/javascript  "access plus 0 seconds"
+  ExpiresByType text/javascript         "access plus 0 seconds"
   ExpiresByType text/html               "access plus 0 seconds"
 </IfModule>
 
@@ -40,25 +37,23 @@
     Header set Cache-Control "public, max-age=31536000, immutable"
   </FilesMatch>
   <FilesMatch "\.(js|css)$">
-    Header set Cache-Control "public, max-age=2592000"
+    Header set Cache-Control "no-cache, no-store, must-revalidate"
+    Header set Pragma "no-cache"
+    Header set Expires "0"
   </FilesMatch>
   <FilesMatch "\.html$">
     Header set Cache-Control "no-cache, must-revalidate"
   </FilesMatch>
 
-  # Permite que el navegador establezca conexiones y descargue recursos
-  # importantes lo antes posible sin alterar el HTML generado.
   Header add Link "</assets/hero-tire.webp>; rel=preload; as=image; type=image/webp"
   Header add Link "</assets/fonts/barlow-condensed-latin-800-normal.woff2>; rel=preload; as=font; type=font/woff2; crossorigin"
 </IfModule>
 
-# --- Tipo MIME de woff2 para Apache antiguos ---
 <IfModule mod_mime.c>
   AddType font/woff2 .woff2
   AddType image/webp .webp
 </IfModule>
 
-# --- Evitar ETag redundante cuando se usan expiraciones largas ---
 <IfModule mod_headers.c>
   Header unset ETag
 </IfModule>
