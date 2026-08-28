@@ -1,4 +1,4 @@
-/* Global Tires — intro inmersiva inspirada en scroll 3D, sin cambiar identidad */
+/* Global Tires — intro inmersiva sin cambiar la paleta de la marca */
 :root{--gt-bg:#141517;--gt-paper:#eceae6;--gt-yellow:#f5b301;--gt-white:#fff;--gt-muted:#a8aab0;}
 .gt-xp{position:relative;height:320vh;background:var(--gt-bg);color:var(--gt-paper);z-index:2;}
 .gt-xp-sticky{position:sticky;top:0;height:100vh;overflow:hidden;perspective:1150px;background:var(--gt-bg);}
@@ -8,8 +8,9 @@
 .gt-xp-title{font-family:'Barlow Condensed',sans-serif;font-weight:800;font-size:clamp(62px,8vw,132px);line-height:.82;letter-spacing:-.025em;text-transform:uppercase;margin:0;color:var(--gt-paper);}
 .gt-xp-title span{display:block;color:transparent;-webkit-text-stroke:1px rgba(236,234,230,.45)}
 .gt-xp-lead{font-size:clamp(16px,1.35vw,20px);line-height:1.55;color:var(--gt-muted);max-width:540px;margin-top:26px;}
-.gt-xp-stage{position:absolute;inset:0;display:grid;place-items:center;transform-style:preserve-3d;}
-.gt-xp-tire{position:absolute;z-index:7;width:min(34vw,500px);max-height:76vh;object-fit:contain;transform-origin:center center;will-change:transform,opacity,filter;}
+.gt-xp-stage{position:absolute;inset:0;display:grid;place-items:center;transform-style:preserve-3d;isolation:isolate;}
+/* Multiply elimina visualmente el cuadrado blanco de la foto real sin cambiar el archivo ni la paleta. */
+.gt-xp-tire{position:absolute;z-index:7;width:min(34vw,500px);max-height:76vh;object-fit:contain;transform-origin:center center;will-change:transform,opacity,filter;mix-blend-mode:multiply;}
 .gt-xp-fingers{position:absolute;inset:0;transform-style:preserve-3d;pointer-events:none;}
 .gt-xp-finger{position:absolute;width:clamp(52px,5.6vw,88px);height:clamp(300px,56vh,590px);left:50%;top:50%;border-radius:999px;background:linear-gradient(90deg,#202226 0%,#555960 36%,#2f3237 62%,#181a1d 100%);box-shadow:inset 0 0 0 1px rgba(255,255,255,.10),inset -10px 0 24px rgba(0,0,0,.30),0 30px 70px rgba(0,0,0,.48);transform-origin:center center;will-change:transform,opacity;opacity:.9;}
 .gt-xp-finger::after{content:'';position:absolute;inset:6% 13%;border-radius:999px;background:linear-gradient(180deg,rgba(255,255,255,.16),transparent 34%,rgba(245,179,1,.16));opacity:.82;}
@@ -22,7 +23,7 @@
 .gt-xp-ring{position:absolute;z-index:3;width:min(58vw,790px);aspect-ratio:1;border-radius:50%;border:1px solid rgba(236,234,230,.14);box-shadow:0 0 105px rgba(245,179,1,.09) inset;}
 .gt-xp-ring::before,.gt-xp-ring::after{content:'';position:absolute;border-radius:50%;inset:12%;border:1px dashed rgba(245,179,1,.28)}
 .gt-xp-ring::after{inset:27%;border-style:solid;border-color:rgba(236,234,230,.10)}
-.gt-xp-progress{position:absolute;right:clamp(18px,3vw,42px);top:50%;transform:translateY(-50%);z-index:20;display:grid;gap:8px}.gt-xp-progress i{display:block;width:3px;height:28px;background:#3b3d41;transition:.3s}.gt-xp-progress i.on{height:70px;background:var(--gt-yellow);box-shadow:0 0 18px rgba(245,179,1,.45)}
+.gt-xp-progress{position:absolute;right:clamp(18px,3vw,42px);top:50%;transform:translateY(-50%);z-index:20;display:grid;gap:8px}.gt-xp-progress i{display:block;width:5px;height:28px;background:#3b3d41;transition:height .35s ease,background .35s ease,box-shadow .35s ease;cursor:pointer;border-radius:4px}.gt-xp-progress i.on{height:70px;background:var(--gt-yellow);box-shadow:0 0 18px rgba(245,179,1,.45)}.gt-xp-progress i:focus-visible{outline:2px solid var(--gt-paper);outline-offset:4px}
 .gt-xp-scene-label{position:absolute;right:clamp(36px,8vw,120px);bottom:clamp(34px,6vw,84px);z-index:13;font-family:'Barlow Condensed',sans-serif;text-transform:uppercase;text-align:right}.gt-xp-scene-label small{display:block;color:var(--gt-yellow);letter-spacing:.22em;font-size:11px}.gt-xp-scene-label strong{display:block;font-size:clamp(34px,4vw,64px);line-height:.9;margin-top:8px}
 .gt-xp-scroll{position:absolute;left:clamp(22px,6vw,90px);bottom:26px;z-index:13;font-size:11px;text-transform:uppercase;letter-spacing:.18em;color:#777b81}.gt-xp-scroll::after{content:'';display:inline-block;width:52px;height:1px;background:var(--gt-yellow);margin-left:12px;vertical-align:middle}
 .gt-xp-exit{position:absolute;inset:0;pointer-events:none;background:linear-gradient(to bottom,transparent 55%,rgba(236,234,230,.96));z-index:15;opacity:0;}
