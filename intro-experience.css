@@ -8,9 +8,10 @@
 .gt-xp-title{font-family:'Barlow Condensed',sans-serif;font-weight:800;font-size:clamp(62px,8vw,132px);line-height:.82;letter-spacing:-.025em;text-transform:uppercase;margin:0;color:var(--gt-paper);}
 .gt-xp-title span{display:block;color:transparent;-webkit-text-stroke:1px rgba(236,234,230,.45)}
 .gt-xp-lead{font-size:clamp(16px,1.35vw,20px);line-height:1.55;color:var(--gt-muted);max-width:540px;margin-top:26px;}
-.gt-xp-stage{position:absolute;inset:0;display:grid;place-items:center;transform-style:preserve-3d;isolation:isolate;}
-/* Multiply elimina visualmente el cuadrado blanco de la foto real sin cambiar el archivo ni la paleta. */
-.gt-xp-tire{position:absolute;z-index:7;width:min(34vw,500px);max-height:76vh;object-fit:contain;transform-origin:center center;will-change:transform,opacity,filter;mix-blend-mode:multiply;}
+.gt-xp-stage{position:absolute;inset:0;display:grid;place-items:center;transform-style:preserve-3d;}
+/* La inversión convierte el fondo blanco en negro y screen lo vuelve invisible
+   sobre el escenario oscuro; queda únicamente la silueta clara del neumático. */
+.gt-xp-tire{position:absolute;z-index:7;width:min(34vw,500px);max-height:76vh;object-fit:contain;transform-origin:center center;will-change:transform,opacity,filter;mix-blend-mode:screen;filter:invert(1) grayscale(1) contrast(1.18) brightness(1.12);}
 .gt-xp-fingers{position:absolute;inset:0;transform-style:preserve-3d;pointer-events:none;}
 .gt-xp-finger{position:absolute;width:clamp(52px,5.6vw,88px);height:clamp(300px,56vh,590px);left:50%;top:50%;border-radius:999px;background:linear-gradient(90deg,#202226 0%,#555960 36%,#2f3237 62%,#181a1d 100%);box-shadow:inset 0 0 0 1px rgba(255,255,255,.10),inset -10px 0 24px rgba(0,0,0,.30),0 30px 70px rgba(0,0,0,.48);transform-origin:center center;will-change:transform,opacity;opacity:.9;}
 .gt-xp-finger::after{content:'';position:absolute;inset:6% 13%;border-radius:999px;background:linear-gradient(180deg,rgba(255,255,255,.16),transparent 34%,rgba(245,179,1,.16));opacity:.82;}
