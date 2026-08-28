@@ -47,6 +47,8 @@
     let dots = [...xp.querySelectorAll('.gt-xp-progress i')];
     let exit = xp.querySelector('.gt-xp-exit');
     if (!tire || !ring || !copy || !label || !exit || dots.length !== 4) return;
+    tire.src = 'assets/models/rd224-ny-profile.webp';
+    tire.alt = 'Neumático Tianfu RD224 de perfil';
 
     const stages = [
       ['01 · Entrada', 'Neumático<br>protagonista'],
@@ -86,17 +88,23 @@
          Volvemos a obtener los nodos visibles para no animar referencias viejas. */
       const liveXp = document.querySelector('.gt-xp');
       if (!liveXp) return;
-      if (liveXp !== xp || !xp.isConnected) {
+      const liveTire = liveXp.querySelector('.gt-xp-tire');
+      const liveDots = [...liveXp.querySelectorAll('.gt-xp-progress i')];
+      if (liveXp !== xp || !xp.isConnected || liveTire !== tire || liveDots[0] !== dots[0]) {
         xp = liveXp;
         xp.dataset.motionReady = 'true';
-        tire = xp.querySelector('.gt-xp-tire');
+        tire = liveTire;
         fingers = [...xp.querySelectorAll('.gt-xp-finger')];
         ring = xp.querySelector('.gt-xp-ring');
         copy = xp.querySelector('.gt-xp-copy');
         label = xp.querySelector('.gt-xp-scene-label');
-        dots = [...xp.querySelectorAll('.gt-xp-progress i')];
+        dots = liveDots;
         exit = xp.querySelector('.gt-xp-exit');
         last = -1;
+        if (tire) {
+          tire.src = 'assets/models/rd224-ny-profile.webp';
+          tire.alt = 'Neumático Tianfu RD224 de perfil';
+        }
         prepareDots();
       }
       if (!tire || !ring || !copy || !label || !exit || dots.length !== 4) return;
@@ -131,7 +139,7 @@
 
       tire.style.transform = `translate3d(${x}px,${y}px,${z}px) rotate(${rot}deg) scale(${scale})`;
       tire.style.opacity = String(1 - finish * .22);
-      tire.style.filter = `contrast(1.08) brightness(1.18) drop-shadow(0 ${lerp(22, 54, close)}px ${lerp(30, 70, close)}px rgba(0,0,0,.68))`;
+      tire.style.filter = `invert(1) grayscale(1) contrast(1.18) brightness(1.12) drop-shadow(0 ${lerp(22, 54, close)}px ${lerp(30, 70, close)}px rgba(245,179,1,.18))`;
 
       fingers.forEach((finger, i) => {
         const side = i < 3 ? -1 : 1;
