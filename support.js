@@ -2,11 +2,11 @@
 (() => {
   const css=document.createElement('link');
   css.rel='stylesheet';
-  css.href='./intro-experience.css?v=20260828a';
+  css.href='./intro-experience.css?v=20260828c';
   document.head.appendChild(css);
   document.write('<script src="./runtime.js"><\/script>');
   const s=document.createElement('script');
-  s.src='./intro-experience.js?v=20260828a';
+  s.src='./intro-experience.js?v=20260828c';
   s.async=false;
   document.head.appendChild(s);
 })();
