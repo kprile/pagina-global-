@@ -1,13 +1,35 @@
-/* Global Tires V3 — reemplazo estructural visual sin tocar catálogo/runtime */
+/* Global Tires V3.1 — reemplazo estructural visual sin tocar catálogo/runtime */
 (() => {
-  const V = '20260828-v3';
+  const V = '20260828-v31';
   const reduced = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 
   function loadCss(){
-    if (document.getElementById('gt-v3-css')) return;
-    const l=document.createElement('link');
-    l.id='gt-v3-css'; l.rel='stylesheet'; l.href='./premium-v3.css?v='+V;
-    document.head.appendChild(l);
+    if (!document.getElementById('gt-v3-css')) {
+      const l=document.createElement('link');
+      l.id='gt-v3-css'; l.rel='stylesheet'; l.href='./premium-v3.css?v='+V;
+      document.head.appendChild(l);
+    }
+    if (!document.getElementById('gt-v31-fixes')) {
+      const s=document.createElement('style');
+      s.id='gt-v31-fixes';
+      s.textContent=`
+        .gt-v3-story-media{overflow:visible!important;min-width:0!important;}
+        .gt-v3-story-tire{width:min(45vw,610px)!important;height:min(66vh,650px)!important;object-fit:contain!important;object-position:center!important;transform-origin:center center!important;filter:drop-shadow(0 42px 60px rgba(0,0,0,.72)) contrast(1.08) saturate(.92)!important;}
+        .gt-v3-story-ring{width:min(41vw,610px)!important;max-width:610px!important;}
+        .gt-v3-story-progress{z-index:12!important;right:clamp(6px,1vw,18px)!important;padding:12px 10px!important;background:rgba(5,6,7,.52)!important;border:1px solid rgba(255,255,255,.06)!important;backdrop-filter:blur(10px)!important;}
+        .gt-v3-story-progress i{cursor:pointer!important;width:4px!important;}
+        .gt-v3-story-progress i.is-active{height:74px!important;}
+        .gt-v3-step{transition:opacity .55s ease,transform .65s cubic-bezier(.2,.75,.2,1)!important;}
+        .gt-v3-story.is-autoplay .gt-v3-step.is-active{animation:gtV31StepIn .7s cubic-bezier(.2,.75,.2,1) both;}
+        @keyframes gtV31StepIn{from{opacity:0;transform:translateY(calc(-50% + 38px))}to{opacity:1;transform:translateY(-50%)}}
+        @media(max-width:980px){
+          .gt-v3-story-tire{width:min(82vw,500px)!important;height:42vh!important;}
+          .gt-v3-story-ring{width:min(72vw,470px)!important;}
+          .gt-v3-story-progress{right:8px!important;}
+        }
+      `;
+      document.head.appendChild(s);
+    }
   }
 
   function validHref(a){
@@ -62,11 +84,11 @@
     </div>`;
 
     const story=document.createElement('section');
-    story.className='gt-v3-story';
+    story.className='gt-v3-story is-autoplay';
     story.innerHTML=`<div class="gt-v3-story-sticky">
       <div class="gt-v3-story-media" aria-hidden="true">
         <div class="gt-v3-story-ring"></div>
-        <img class="gt-v3-story-tire" src="assets/hero-tire.webp" alt="" decoding="async">
+        <img class="gt-v3-story-tire" src="assets/models/rd224-1.webp" alt="" decoding="async">
       </div>
       <div class="gt-v3-story-copy">
         <article class="gt-v3-step is-active"><small>01 // CONTACT PATCH</small><h2>Potencia<br>al suelo</h2><p>Una selección construida alrededor de agarre, estabilidad y respuesta. El neumático deja de ser una tarjeta: pasa a ser el producto protagonista.</p></article>
@@ -74,7 +96,7 @@
         <article class="gt-v3-step"><small>03 // DIRECT IMPORT</small><h2>Stock sin<br>intermediarios</h2><p>Grenlander, Haida y Tianfu dentro de una operación enfocada en distribución y venta mayorista.</p></article>
         <article class="gt-v3-step"><small>04 // FAST QUOTE</small><h2>Cotiza.<br>Cierra. Rueda.</h2><p>Del catálogo al WhatsApp en segundos. Una experiencia comercial rápida, directa y visual.</p></article>
       </div>
-      <div class="gt-v3-story-progress" aria-hidden="true"><i class="is-active"></i><i></i><i></i><i></i></div>
+      <div class="gt-v3-story-progress" aria-label="Escenas"><i class="is-active" data-slide="0"></i><i data-slide="1"></i><i data-slide="2"></i><i data-slide="3"></i></div>
     </div>`;
 
     old.before(hero);
@@ -104,24 +126,59 @@
   }
 
   function initStory(story){
-    if(reduced || !story) return;
+    if(!story) return;
     const tire=story.querySelector('.gt-v3-story-tire');
     const ring=story.querySelector('.gt-v3-story-ring');
     const steps=[...story.querySelectorAll('.gt-v3-step')];
     const dots=[...story.querySelectorAll('.gt-v3-story-progress i')];
-    let last=-1,raf=0;
-    function update(){
+    let current=0,raf=0,autoTimer=0,visible=false,userScrolling=false,scrollTimer=0;
+
+    const show=(idx,fromAuto=false)=>{
+      current=(idx+steps.length)%steps.length;
+      steps.forEach((s,i)=>s.classList.toggle('is-active',i===current));
+      dots.forEach((d,i)=>d.classList.toggle('is-active',i===current));
+      if(tire && !reduced){
+        const poses=[[-4,-8,.88],[-1,3,.96],[4,-5,1.04],[0,6,.92]];
+        const [r,x,s]=poses[current];
+        tire.style.transform=`translate3d(${x}%,0,0) rotate(${r}deg) scale(${s})`;
+      }
+      if(ring && !reduced) ring.style.transform=`rotate(${current*38}deg) scale(${.94+current*.02})`;
+      if(fromAuto){story.classList.remove('is-autoplay');void story.offsetWidth;story.classList.add('is-autoplay');}
+    };
+
+    dots.forEach((d,i)=>d.addEventListener('click',()=>{show(i);restartAuto();}));
+
+    const restartAuto=()=>{
+      clearInterval(autoTimer);
+      if(reduced) return;
+      autoTimer=setInterval(()=>{if(visible && !userScrolling)show(current+1,true)},4200);
+    };
+
+    const updateFromScroll=()=>{
       raf=0;
       const rect=story.getBoundingClientRect();
       const travel=Math.max(1,story.offsetHeight-innerHeight);
-      const p=Math.max(0,Math.min(1,-rect.top/travel));
-      const idx=Math.min(steps.length-1,Math.floor(p*steps.length));
-      if(idx!==last){steps.forEach((s,i)=>s.classList.toggle('is-active',i===idx));dots.forEach((d,i)=>d.classList.toggle('is-active',i===idx));last=idx;}
-      if(tire){const s=.78+p*.55,r=-16+p*32,x=-7+p*14;tire.style.transform=`translate3d(${x}%,0,0) rotate(${r}deg) scale(${s})`;}
-      if(ring) ring.style.transform=`rotate(${p*130}deg) scale(${.9+p*.12})`;
-    }
-    const onScroll=()=>{if(!raf)raf=requestAnimationFrame(update)};
-    update(); addEventListener('scroll',onScroll,{passive:true}); addEventListener('resize',onScroll,{passive:true});
+      const p=Math.max(0,Math.min(.9999,-rect.top/travel));
+      if(rect.top<=0 && rect.bottom>=innerHeight){
+        const idx=Math.min(steps.length-1,Math.floor(p*steps.length));
+        if(idx!==current) show(idx);
+      }
+    };
+
+    const onScroll=()=>{
+      userScrolling=true;
+      clearTimeout(scrollTimer);
+      scrollTimer=setTimeout(()=>{userScrolling=false},650);
+      if(!raf)raf=requestAnimationFrame(updateFromScroll);
+    };
+
+    if('IntersectionObserver' in window){
+      const io=new IntersectionObserver(entries=>{visible=entries[0]?.isIntersecting||false},{threshold:.35});
+      io.observe(story);
+    }else visible=true;
+
+    show(0);restartAuto();
+    if(!reduced){addEventListener('scroll',onScroll,{passive:true});addEventListener('resize',onScroll,{passive:true});}
   }
 
   function boot(){
