@@ -39,13 +39,13 @@
     if (xp.dataset.motionReady === 'true') return;
     xp.dataset.motionReady = 'true';
 
-    const tire = xp.querySelector('.gt-xp-tire');
-    const fingers = [...xp.querySelectorAll('.gt-xp-finger')];
-    const ring = xp.querySelector('.gt-xp-ring');
-    const copy = xp.querySelector('.gt-xp-copy');
-    const label = xp.querySelector('.gt-xp-scene-label');
-    const dots = [...xp.querySelectorAll('.gt-xp-progress i')];
-    const exit = xp.querySelector('.gt-xp-exit');
+    let tire = xp.querySelector('.gt-xp-tire');
+    let fingers = [...xp.querySelectorAll('.gt-xp-finger')];
+    let ring = xp.querySelector('.gt-xp-ring');
+    let copy = xp.querySelector('.gt-xp-copy');
+    let label = xp.querySelector('.gt-xp-scene-label');
+    let dots = [...xp.querySelectorAll('.gt-xp-progress i')];
+    let exit = xp.querySelector('.gt-xp-exit');
     if (!tire || !ring || !copy || !label || !exit || dots.length !== 4) return;
 
     const stages = [
@@ -55,7 +55,9 @@
       ['04 · Salida', 'Explora<br>el catálogo']
     ];
 
-    dots.forEach((dot, index) => {
+    const prepareDots = () => dots.forEach((dot, index) => {
+      if (dot.dataset.controlReady === 'true') return;
+      dot.dataset.controlReady = 'true';
       dot.setAttribute('role', 'button');
       dot.setAttribute('tabindex', '0');
       dot.setAttribute('aria-label', `Ir a escena ${index + 1}`);
@@ -72,6 +74,7 @@
         }
       });
     });
+    prepareDots();
 
     if (reduced) return;
 
@@ -79,6 +82,24 @@
     let last = -1;
     function update() {
       raf = 0;
+      /* El runtime puede reemplazar la sección al cargar productos o filtros.
+         Volvemos a obtener los nodos visibles para no animar referencias viejas. */
+      const liveXp = document.querySelector('.gt-xp');
+      if (!liveXp) return;
+      if (liveXp !== xp || !xp.isConnected) {
+        xp = liveXp;
+        xp.dataset.motionReady = 'true';
+        tire = xp.querySelector('.gt-xp-tire');
+        fingers = [...xp.querySelectorAll('.gt-xp-finger')];
+        ring = xp.querySelector('.gt-xp-ring');
+        copy = xp.querySelector('.gt-xp-copy');
+        label = xp.querySelector('.gt-xp-scene-label');
+        dots = [...xp.querySelectorAll('.gt-xp-progress i')];
+        exit = xp.querySelector('.gt-xp-exit');
+        last = -1;
+        prepareDots();
+      }
+      if (!tire || !ring || !copy || !label || !exit || dots.length !== 4) return;
       const rect = xp.getBoundingClientRect();
       const travel = Math.max(1, xp.offsetHeight - innerHeight);
       const p = clamp(-rect.top / travel);
