@@ -1,0 +1,5 @@
+User-agent: *
+Allow: /
+Disallow: /prueba/
+
+Sitemap: https://globaltires.cl/sitemap.xml
