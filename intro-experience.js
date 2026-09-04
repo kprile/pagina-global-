@@ -47,14 +47,14 @@
     let dots = [...xp.querySelectorAll('.gt-xp-progress i')];
     let exit = xp.querySelector('.gt-xp-exit');
     if (!tire || !ring || !copy || !label || !exit || dots.length !== 4) return;
-    tire.src = 'assets/models/rd224-ny-profile.webp';
+    tire.src = 'assets/models/rd224-hero-transparent.webp';
     tire.alt = 'Neumático Tianfu RD224 de perfil';
 
     const stages = [
       ['01 · Entrada', 'Neumático<br>protagonista'],
-      ['02 · Profundidad', 'Entre la<br>estructura'],
+      ['02 · Ingeniería', 'Dentro de la<br>estructura'],
       ['03 · Aplicación', 'Auto · SUV<br>Camioneta · Carga'],
-      ['04 · Salida', 'Explora<br>el catálogo']
+      ['04 · Salida', 'Encuentra<br>tu medida']
     ];
 
     const wiredDots = new WeakSet();
@@ -103,7 +103,7 @@
         exit = xp.querySelector('.gt-xp-exit');
         last = -1;
         if (tire) {
-          tire.src = 'assets/models/rd224-ny-profile.webp';
+          tire.src = 'assets/models/rd224-hero-transparent.webp';
           tire.alt = 'Neumático Tianfu RD224 de perfil';
         }
         prepareDots();
@@ -123,39 +123,38 @@
         label.innerHTML = `<small>${stages[idx][0]}</small><strong>${stages[idx][1]}</strong>`;
       }
 
-      const enter = clamp(p / .26);
-      const tunnel = clamp((p - .18) / .48);
-      const close = clamp((p - .56) / .30);
-      const finish = clamp((p - .88) / .12);
+      const enter = clamp(p / .24);
+      const tunnel = clamp((p - .16) / .46);
+      const close = clamp((p - .54) / .28);
+      const finish = clamp((p - .84) / .16);
 
-      let scale = lerp(.34, .82, enter);
-      scale = lerp(scale, 1.18, tunnel);
-      scale = lerp(scale, 1.46, close);
-      scale = lerp(scale, 1.30, finish);
+      let scale = lerp(.64, .84, enter);
+      scale = lerp(scale, 1.02, tunnel);
+      scale = lerp(scale, 1.10, close);
+      scale = lerp(scale, 1.02, finish);
 
-      const y = lerp(105, 35, enter) + lerp(0, -55, tunnel) + lerp(0, -28, close) - finish * 70;
-      const x = lerp(-28, 18, tunnel) + Math.sin(p * Math.PI * 2) * 10;
-      const rot = lerp(-12, 3, enter) + lerp(0, 12, tunnel) - lerp(0, 7, close);
-      const z = lerp(-180, 40, enter) + lerp(0, 170, tunnel) + lerp(0, 90, close);
+      const y = lerp(80, 24, enter) + lerp(0, -38, tunnel) - finish * 72;
+      const x = lerp(-18, 12, tunnel) + Math.sin(p * Math.PI * 2) * 5;
+      const rot = lerp(-9, 0, enter) + lerp(0, 8, tunnel) - lerp(0, 5, close);
+      const z = lerp(-110, 30, enter) + lerp(0, 100, tunnel) + lerp(0, 45, close);
 
       tire.style.transform = `translate3d(${x}px,${y}px,${z}px) rotate(${rot}deg) scale(${scale})`;
-      tire.style.opacity = String(1 - finish * .22);
-      tire.style.filter = `invert(1) grayscale(1) contrast(1.18) brightness(1.12) drop-shadow(0 ${lerp(22, 54, close)}px ${lerp(30, 70, close)}px rgba(245,179,1,.18))`;
+      tire.style.opacity = String(1 - finish);
+      tire.style.filter = `contrast(1.04) brightness(.88) saturate(.92) drop-shadow(0 ${lerp(18, 34, close)}px ${lerp(24, 44, close)}px rgba(245,179,1,.18))`;
 
       fingers.forEach((finger, i) => {
         const side = i < 3 ? -1 : 1;
-        const fromCenter = Math.abs(2.5 - i);
-        const spread = side * lerp(0, 42 + fromCenter * 20, tunnel);
-        const lift = (i % 2 ? 1 : -1) * lerp(0, 18, tunnel);
-        const depth = (i === 2 || i === 3) ? -45 : 95;
-        finger.style.translate = `${spread}px ${lift}px ${lerp(-20, depth, tunnel)}px`;
-        finger.style.opacity = String(lerp(.78, 1, tunnel) * (1 - finish * .42));
+        const spread = side * lerp(8, 58 + (i % 3) * 12, tunnel);
+        const lift = (i % 3 - 1) * lerp(0, 12, tunnel);
+        const depth = (i === 2 || i === 3) ? -30 : 55;
+        finger.style.translate = `${spread}px ${lift}px ${lerp(-12, depth, tunnel)}px`;
+        finger.style.opacity = String(lerp(.28, .62, tunnel) * (1 - finish));
       });
 
       ring.style.transform = `rotate(${p * 160}deg) scale(${lerp(.82, 1.14, close)})`;
       ring.style.opacity = String(lerp(.35, .85, tunnel) * (1 - finish * .5));
-      copy.style.opacity = String(1 - clamp((p - .16) / .24));
-      copy.style.transform = `translateY(calc(-50% - ${p * 40}px))`;
+      copy.style.opacity = String(1 - clamp((p - .26) / .30));
+      copy.style.transform = `translateY(calc(-50% - ${p * 24}px))`;
       exit.style.opacity = String(finish);
     }
 
