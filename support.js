@@ -433,7 +433,8 @@
         if (key.includes("-") && !(kind === "x-import" && (key.startsWith("aria-") || key.startsWith("data-"))))
           key = kebabToCamel(key);
       } else {
-        if (key === "class") key = "className";
+        if (key === "data-dc-src") key = "src";
+        else if (key === "class") key = "className";
         else if (key === "for") key = "htmlFor";
         else if (key.startsWith("on"))
           key = EVENT_MAP[key] || "on" + key[2].toUpperCase() + key.slice(3);
