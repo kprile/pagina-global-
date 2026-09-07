@@ -17,7 +17,8 @@ Options -Indexes
   RewriteEngine On
 
   # La copia de pruebas y /index.html no deben competir con la portada.
-  RewriteCond %{REQUEST_URI} ^/prueba(?:/|$) [NC]\n  RewriteRule ^ https://globaltires.cl/ [R=301,L,NE,QSD]
+  RewriteCond %{REQUEST_URI} ^/prueba(?:/|$) [NC]
+  RewriteRule ^ https://globaltires.cl/ [R=301,L,NE,QSD]
   RewriteCond %{THE_REQUEST} \s/+index\.html(?:[?\s]) [NC]
   RewriteRule ^index\.html$ https://globaltires.cl/ [R=301,L,NE,QSD]
 
