@@ -179,6 +179,14 @@ window.__resources = Object.assign(window.__resources || {}, {
   .gt-brand:hover img{animation:gtLogoWiggle 0.6s ease-in-out;}
   @keyframes gtBadgeBounce{0%,100%{transform:translateY(0);} 30%{transform:translateY(-4px);} 50%{transform:translateY(0);} 70%{transform:translateY(-2px);}}
   .gt-cta-header{animation:gtBadgeBounce 2.4s ease-in-out 1s infinite;}
+  .gt-logo-intro{position:relative; display:flex; align-items:center; height:64px; width:153px; overflow:visible; isolation:isolate;}
+  .gt-logo-intro img{position:relative; z-index:1; opacity:0; animation:gtLogoSettle 0.85s cubic-bezier(.2,.75,.2,1) 1.45s forwards;}
+  .gt-logo-boat{position:absolute; z-index:2; top:50%; left:calc(100% + 220px); width:190px; height:82px; pointer-events:none; transform:translateY(-50%); animation:gtBoatJourney 4.8s cubic-bezier(.22,.7,.2,1) 0.1s forwards;}
+  .gt-logo-boat svg{display:block; width:100%; height:100%; filter:drop-shadow(0 5px 5px rgba(20,21,23,.24));}
+  @keyframes gtLogoSettle{0%{opacity:0; transform:translateX(-18px) scale(.96);} 70%{opacity:1; transform:translateX(3px) scale(1.01);} 100%{opacity:1; transform:translateX(0) scale(1);}}
+  @keyframes gtBoatJourney{0%{left:calc(100% + 220px); opacity:0;} 10%{opacity:1;} 25%{left:58%;} 45%{left:18%;} 72%{left:-8%; opacity:1;} 88%{left:-180px; opacity:.35;} 100%{left:-230px; opacity:0;}}
+  @media (max-width:600px){.gt-logo-intro{height:52px; width:125px;}.gt-logo-boat{width:150px; height:66px;}}
+  @media (prefers-reduced-motion:reduce){.gt-logo-intro img{opacity:1; animation:none;}.gt-logo-boat{display:none;}}
 
   /* El panel de la ficha es flex en columna con max-height:90vh. Cuando el
      contenido pasa esa altura, los hijos se encogen porque flex-shrink vale 1
@@ -251,7 +259,19 @@ window.__resources = Object.assign(window.__resources || {}, {
 
   <!-- ============ HEADER ============ -->
   <header data-screen-label="Header" class="gt-header" style="display:flex; align-items:center; justify-content:space-between; gap:16px; padding:12px clamp(20px,5vw,56px); background:#ffffff; position:sticky; top:0; z-index:500; box-shadow:none;">
-    <img width="500" height="209" src="assets/logo-final.webp" alt="Global Tires" style="height:64px; width:auto; display:block;" />
+    <div class="gt-logo-intro" aria-label="Global Tires">
+      <span class="gt-logo-boat" aria-hidden="true">
+        <svg viewBox="0 0 190 82" xmlns="http://www.w3.org/2000/svg" role="img">
+          <path d="M16 53h138l-13 14H35Z" fill="#1a1b1e"/>
+          <path d="M35 67h106" stroke="#f5b301" stroke-width="3" stroke-linecap="round"/>
+          <path d="M92 15v38" stroke="#f5b301" stroke-width="3" stroke-linecap="round"/>
+          <path d="m94 16 48 25H94Z" fill="#f5b301"/>
+          <path d="M92 19 63 42h29Z" fill="#eceae6" opacity=".92"/>
+          <path d="M5 72c17-7 30 8 49 0 17-7 30 8 49 0 17-7 30 8 49 0" fill="none" stroke="#b9c1c8" stroke-width="3" stroke-linecap="round" opacity=".82"/>
+        </svg>
+      </span>
+      <img width="500" height="209" src="assets/logo-final.webp" alt="Global Tires" style="height:64px; width:auto; display:block;" />
+    </div>
     <a href="#catalogo" onClick="{{ goCatalogo }}" class="gt-cta-header" style="font-family:'Barlow Condensed',sans-serif; font-weight:700; font-size:17px; letter-spacing:0.06em; text-transform:uppercase; color:#1a1b1e; border:1px solid #1a1b1e; padding:8px 18px; border-radius:4px;" style-hover="background:#f5b301; border-color:#f5b301; color:#141517;">Buscar mi medida</a>
   </header>
 
