@@ -180,14 +180,14 @@ window.__resources = Object.assign(window.__resources || {}, {
   @keyframes gtBadgeBounce{0%,100%{transform:translateY(0);} 30%{transform:translateY(-4px);} 50%{transform:translateY(0);} 70%{transform:translateY(-2px);}}
   .gt-cta-header{animation:gtBadgeBounce 2.4s ease-in-out 1s infinite;}
   .gt-logo-intro{position:relative; display:flex; align-items:center; height:64px; width:153px; overflow:visible; isolation:isolate;}
-  .gt-logo-intro>img{position:relative; z-index:1; opacity:0; animation:gtLogoSettle 0.85s cubic-bezier(.2,.75,.2,1) 1.45s forwards;}
-  .gt-logo-boat{position:absolute; z-index:2; top:50%; left:calc(100% + 300px); width:280px; height:104px; pointer-events:none; transform:translateY(-50%); animation:gtBoatJourney 5.2s cubic-bezier(.22,.7,.2,1) 0.1s forwards;}
+  .gt-logo-intro>img{position:relative; z-index:1; opacity:0; animation:gtLogoSettle 0.85s cubic-bezier(.2,.75,.2,1) 5.35s forwards;}
+  .gt-logo-boat{position:absolute; z-index:2; top:calc(50% + 20px); left:calc(100% + 300px); width:280px; height:104px; pointer-events:none; transform:translateY(-50%); animation:gtBoatJourney 5.2s cubic-bezier(.22,.7,.2,1) 0.1s forwards;}
   .gt-logo-boat svg{display:block; width:100%; height:100%; filter:drop-shadow(0 5px 5px rgba(20,21,23,.24));}
-  .gt-cargo-logo{position:absolute; z-index:3; top:-7px; left:75px; width:132px; height:55px; padding:3px 8px; display:flex; align-items:center; justify-content:center; background:#fff; border:2px solid #1a1b1e; box-shadow:0 3px 6px rgba(20,21,23,.22);}
+  .gt-cargo-logo{position:absolute; z-index:3; top:3px; left:75px; width:132px; height:55px; padding:3px 8px; display:flex; align-items:center; justify-content:center; background:#fff; border:2px solid #1a1b1e; box-shadow:0 3px 6px rgba(20,21,23,.22);}
   .gt-cargo-logo img{width:100%; height:auto; display:block; opacity:1 !important; animation:none !important;}
   @keyframes gtLogoSettle{0%{opacity:0; transform:translateX(-18px) scale(.96);} 70%{opacity:1; transform:translateX(3px) scale(1.01);} 100%{opacity:1; transform:translateX(0) scale(1);}}
   @keyframes gtBoatJourney{0%{left:calc(100% + 300px); opacity:0;} 9%{opacity:1;} 26%{left:58%;} 47%{left:18%;} 73%{left:-10%; opacity:1;} 89%{left:-260px; opacity:.35;} 100%{left:-320px; opacity:0;}}
-  @media (max-width:600px){.gt-logo-intro{height:52px; width:125px;}.gt-logo-boat{width:220px; height:82px;}.gt-cargo-logo{top:-2px; left:58px; width:104px; height:43px; padding:2px 6px;}}
+  @media (max-width:600px){.gt-logo-intro{height:52px; width:125px;}.gt-logo-boat{top:calc(50% + 15px); width:220px; height:82px;}.gt-cargo-logo{top:2px; left:58px; width:104px; height:43px; padding:2px 6px;}}
   @media (prefers-reduced-motion:reduce){.gt-logo-intro>img{opacity:1; animation:none;}.gt-logo-boat{display:none;}}
 
   /* El panel de la ficha es flex en columna con max-height:90vh. Cuando el
