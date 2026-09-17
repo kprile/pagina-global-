@@ -180,13 +180,15 @@ window.__resources = Object.assign(window.__resources || {}, {
   @keyframes gtBadgeBounce{0%,100%{transform:translateY(0);} 30%{transform:translateY(-4px);} 50%{transform:translateY(0);} 70%{transform:translateY(-2px);}}
   .gt-cta-header{animation:gtBadgeBounce 2.4s ease-in-out 1s infinite;}
   .gt-logo-intro{position:relative; display:flex; align-items:center; height:64px; width:153px; overflow:visible; isolation:isolate;}
-  .gt-logo-intro img{position:relative; z-index:1; opacity:0; animation:gtLogoSettle 0.85s cubic-bezier(.2,.75,.2,1) 1.45s forwards;}
-  .gt-logo-boat{position:absolute; z-index:2; top:50%; left:calc(100% + 220px); width:190px; height:82px; pointer-events:none; transform:translateY(-50%); animation:gtBoatJourney 4.8s cubic-bezier(.22,.7,.2,1) 0.1s forwards;}
+  .gt-logo-intro>img{position:relative; z-index:1; opacity:0; animation:gtLogoSettle 0.85s cubic-bezier(.2,.75,.2,1) 1.45s forwards;}
+  .gt-logo-boat{position:absolute; z-index:2; top:50%; left:calc(100% + 300px); width:280px; height:104px; pointer-events:none; transform:translateY(-50%); animation:gtBoatJourney 5.2s cubic-bezier(.22,.7,.2,1) 0.1s forwards;}
   .gt-logo-boat svg{display:block; width:100%; height:100%; filter:drop-shadow(0 5px 5px rgba(20,21,23,.24));}
+  .gt-cargo-logo{position:absolute; z-index:3; top:-7px; left:75px; width:132px; height:55px; padding:3px 8px; display:flex; align-items:center; justify-content:center; background:#fff; border:2px solid #1a1b1e; box-shadow:0 3px 6px rgba(20,21,23,.22);}
+  .gt-cargo-logo img{width:100%; height:auto; display:block; opacity:1 !important; animation:none !important;}
   @keyframes gtLogoSettle{0%{opacity:0; transform:translateX(-18px) scale(.96);} 70%{opacity:1; transform:translateX(3px) scale(1.01);} 100%{opacity:1; transform:translateX(0) scale(1);}}
-  @keyframes gtBoatJourney{0%{left:calc(100% + 220px); opacity:0;} 10%{opacity:1;} 25%{left:58%;} 45%{left:18%;} 72%{left:-8%; opacity:1;} 88%{left:-180px; opacity:.35;} 100%{left:-230px; opacity:0;}}
-  @media (max-width:600px){.gt-logo-intro{height:52px; width:125px;}.gt-logo-boat{width:150px; height:66px;}}
-  @media (prefers-reduced-motion:reduce){.gt-logo-intro img{opacity:1; animation:none;}.gt-logo-boat{display:none;}}
+  @keyframes gtBoatJourney{0%{left:calc(100% + 300px); opacity:0;} 9%{opacity:1;} 26%{left:58%;} 47%{left:18%;} 73%{left:-10%; opacity:1;} 89%{left:-260px; opacity:.35;} 100%{left:-320px; opacity:0;}}
+  @media (max-width:600px){.gt-logo-intro{height:52px; width:125px;}.gt-logo-boat{width:220px; height:82px;}.gt-cargo-logo{top:-2px; left:58px; width:104px; height:43px; padding:2px 6px;}}
+  @media (prefers-reduced-motion:reduce){.gt-logo-intro>img{opacity:1; animation:none;}.gt-logo-boat{display:none;}}
 
   /* El panel de la ficha es flex en columna con max-height:90vh. Cuando el
      contenido pasa esa altura, los hijos se encogen porque flex-shrink vale 1
@@ -261,13 +263,18 @@ window.__resources = Object.assign(window.__resources || {}, {
   <header data-screen-label="Header" class="gt-header" style="display:flex; align-items:center; justify-content:space-between; gap:16px; padding:12px clamp(20px,5vw,56px); background:#ffffff; position:sticky; top:0; z-index:500; box-shadow:none;">
     <div class="gt-logo-intro" aria-label="Global Tires">
       <span class="gt-logo-boat" aria-hidden="true">
-        <svg viewBox="0 0 190 82" xmlns="http://www.w3.org/2000/svg" role="img">
-          <path d="M16 53h138l-13 14H35Z" fill="#1a1b1e"/>
-          <path d="M35 67h106" stroke="#f5b301" stroke-width="3" stroke-linecap="round"/>
-          <path d="M92 15v38" stroke="#f5b301" stroke-width="3" stroke-linecap="round"/>
-          <path d="m94 16 48 25H94Z" fill="#f5b301"/>
-          <path d="M92 19 63 42h29Z" fill="#eceae6" opacity=".92"/>
-          <path d="M5 72c17-7 30 8 49 0 17-7 30 8 49 0 17-7 30 8 49 0" fill="none" stroke="#b9c1c8" stroke-width="3" stroke-linecap="round" opacity=".82"/>
+        <span class="gt-cargo-logo"><img width="500" height="209" src="assets/logo-final.webp" alt="" /></span>
+        <svg viewBox="0 0 280 104" xmlns="http://www.w3.org/2000/svg" role="img">
+          <path d="M18 65h237l-21 24H45Z" fill="#1a1b1e"/>
+          <path d="M37 89h190" stroke="#f5b301" stroke-width="4" stroke-linecap="round"/>
+          <path d="M31 65h210l-11-12H42Z" fill="#39434a"/>
+          <path d="M44 42h36v22H44Z" fill="#e85d3f"/><path d="M82 42h36v22H82Z" fill="#f5b301"/>
+          <path d="M120 42h36v22H120Z" fill="#3478a6"/><path d="M158 42h36v22H158Z" fill="#e85d3f"/>
+          <path d="M196 42h36v22H196Z" fill="#f5b301"/>
+          <path d="M60 26h35v16H60Z" fill="#3478a6"/><path d="M97 26h35v16H97Z" fill="#e85d3f"/>
+          <path d="M134 26h35v16H134Z" fill="#f5b301"/><path d="M171 26h35v16H171Z" fill="#3478a6"/>
+          <path d="M218 17h24v48h-24Z" fill="#eceae6"/><path d="M222 22h14v6h-14Z" fill="#f5b301"/>
+          <path d="M5 96c22-8 38 8 62 0 22-8 38 8 62 0 22-8 38 8 62 0 22-8 38 8 62 0" fill="none" stroke="#b9c1c8" stroke-width="3" stroke-linecap="round" opacity=".82"/>
         </svg>
       </span>
       <img width="500" height="209" src="assets/logo-final.webp" alt="Global Tires" style="height:64px; width:auto; display:block;" />
